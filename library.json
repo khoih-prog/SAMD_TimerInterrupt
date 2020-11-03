@@ -23,7 +23,7 @@
     ]
   },
   "frameworks": "*",
-  "platforms": "stSAMD",
+  "platforms": "atmelsam",
   "examples": "examples/*/*/*.ino",
   "license": "MIT"
 }
