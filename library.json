@@ -23,7 +23,7 @@
     ]
   },
   "frameworks": "*",
-  "platforms": "atmelsam",
+  "platforms": "*",
   "examples": "examples/*/*/*.ino",
   "license": "MIT"
 }
