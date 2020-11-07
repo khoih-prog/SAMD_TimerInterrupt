@@ -7,7 +7,8 @@ SAMDTimer	KEYWORD1
 SAMD_ISRTimer KEYWORD1
 SAMD_ISR_Timer KEYWORD1
 SAMDTimerNumber KEYWORD1
-timer_callback  KEYWORD1
+timerCallback KEYWORD1
+timerCallback_p KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)

@@ -11,13 +11,15 @@
 
 ## Features
 
-This library enables you to use Interrupt from Hardware Timers on an SAMD-based board.
+This library enables you to use Interrupt from Hardware Timers on an SAMD-based board, such as SAMD21 Nano-33-IoT, Adafruit SAMD51 Itsy-Bitsy M4, etc.
+
+As **Hardware Timers are rare, and very precious assets** of any board, this library now enables you to use up to **16 ISR-based Timers, while consuming only 1 Hardware Timer**. Timers' interval is very long (**ulong millisecs**).
 
 ### Why do we need this Hardware Timer Interrupt?
 
 Imagine you have a system with a **mission-critical** function, measuring water level and control the sump pump or doing something much more important. You normally use a software timer to poll, or even place the function in loop(). But what if another function is **blocking** the loop() or setup().
 
-So your function **might not be executed, and the result would be disastrous.**
+So your function **might not be executed on-time or not at all, and the result would be disastrous.**
 
 You'd prefer to have your function called, no matter what happening with other functions (busy loop, bug, etc.).
 
@@ -42,6 +44,10 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 ---
 ---
 
+### Releases v1.0.1
+
+1. Add complicated example [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) utilizing and demonstrating the full usage of 16 independent ISR Timers.
+
 ### Releases v1.0.0
 
 1. Permit up to 16 super-long-time, super-accurate ISR-based timers to avoid being blocked
@@ -61,8 +67,8 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 
  1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino SAMD core v1.8.9+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards (Nano 33 IoT, etc.).
- 3. [`Adafruit SAMD core v1.6.3+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
- 4. [`Seeeduino SAMD core v1.7.9+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.)
+ 3. [`Adafruit SAMD core v1.6.4+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
+ 4. [`Seeeduino SAMD core v1.8.1+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.)
  5. [`Blynk library 0.6.1+`](https://github.com/blynkkk/blynk-library) to use with certain example.
  6. To use with certain example, depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500.
@@ -70,7 +76,8 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
    - [`Ethernet3 library v1.5.3+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500. ***Ready*** from v1.0.1.
    - [`UIPEthernet library v2.0.9+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60.
-
+ 7. To use with certain example
+   - [`SimpleTimer library`](https://github.com/schinken/SimpleTimer) for [ISR_16_Timers_Array example](examples/ISR_16_Timers_Array).
 ---
 ---
 
@@ -125,22 +132,22 @@ These files must be copied into the directory:
 
 Whenever the above-mentioned compiler error issue is fixed with the new Arduino SAMD release, you don't need to copy the `Arduino.h` file anymore.
 
- 2. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.3) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.3). 
+ 2. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.4) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.4). 
 
-Supposing the Adafruit SAMD core version is 1.6.3. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.6.4. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.6.3/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.6.4/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 
- 3. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.9) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9). 
+ 3. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.8.1) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1). 
 
-Supposing the Seeeduino SAMD core version is 1.7.9. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.8.1. This file must be copied into the directory:
 
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -366,13 +373,14 @@ void setup()
 ### Examples: 
 
  1. [Argument_None](examples/Argument_None)
- 2. [ISR_RPM_Measure](examples/ISR_RPM_Measure)
- 3. [ISR_Timer_Complex_Ethernet](examples/ISR_Timer_Complex_Ethernet)
- 4. [ISR_Timer_Complex_WiFiNINA](examples/ISR_Timer_Complex_WiFiNINA)
- 5. [RPM_Measure](examples/RPM_Measure)
- 6. [SwitchDebounce](examples/SwitchDebounce)
- 7. [TimerInterruptTest](examples/TimerInterruptTest)
- 8. [TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
+ 2. [ISR_16_Timers_Array](examples/ISR_16_Timers_Array)
+ 3. [ISR_RPM_Measure](examples/ISR_RPM_Measure)
+ 4. [ISR_Timer_Complex_Ethernet](examples/ISR_Timer_Complex_Ethernet)
+ 5. [ISR_Timer_Complex_WiFiNINA](examples/ISR_Timer_Complex_WiFiNINA)
+ 6. [RPM_Measure](examples/RPM_Measure)
+ 7. [SwitchDebounce](examples/SwitchDebounce)
+ 8. [TimerInterruptTest](examples/TimerInterruptTest)
+ 9. [TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
 
 
 ---
@@ -654,7 +662,7 @@ While software timer, **programmed for 2s, is activated after 7.937s !!!**. Then
 
 ```
 Starting ISR_Timer_Complex_WiFiNINA on SAMD_NANO_33_IOT
-Version : 1.0.0
+Version : 1.0.1
 F_CPU (MHz) = 48, TIMER_HZ = 48
 TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
 Starting  ITimer OK, millis() = 810
@@ -716,7 +724,7 @@ blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3002
 
 ```
 Starting TimerInterruptTest on ITSYBITSY_M4
-Version : 1.0.0
+Version : 1.0.1
 F_CPU (MHz) = 120, TIMER_HZ = 48
 TC_Timer::startTimer _Timer = 0x4101c000, TC3 = 0x4101c000
 Starting  ITimer1 OK, millis() = 1820
@@ -791,7 +799,7 @@ ITimer0: millis() = 91018, delta = 1000
 
 ```
 Starting Argument_None on SAMD_NANO_33_IOT
-Version : 1.0.0
+Version : 1.0.1
 F_CPU (MHz) = 48, TIMER_HZ = 48
 TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
 Starting  ITimer1 OK, millis() = 910
@@ -825,10 +833,138 @@ ITimer0: millis() = 10910, delta = 500
 ITimer1: millis() = 10911, delta = 2000
 ITimer0: millis() = 11410, delta = 500
 ITimer0: millis() = 11910, delta = 500
+```
 
+4. The following is the sample terminal output when running example [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) on **Arduino SAMD21 SAMD_NANO_33_IOT** to demonstrate the accuracy of ISR Hardware Timer, **especially when system is very busy or blocked**. The 16 independent ISR timers are **programmed to be activated repetitively after certain intervals, is activated exactly after that programmed interval !!!**
+
+While software timer, **programmed for 2s, is activated after 10.000s in loop()!!!**.
+
+In this example, 16 independent ISR Timers are used, yet utilized just one Hardware Timer. The Timer Intervals and Function Pointers are stored in arrays to facilitate the code modification.
+
+
+```
+Starting ISR_16_Timers_Array on SAMD_NANO_33_IOT
+Version : 1.0.1
+CPU Frequency = 48 MHz
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Starting  ITimer OK, millis() = 1421
+1s: Delta ms = 1000, ms = 2421
+1s: Delta ms = 1000, ms = 3421
+2s: Delta ms = 2000, ms = 3421
+1s: Delta ms = 1000, ms = 4421
+3s: Delta ms = 3000, ms = 4421
+1s: Delta ms = 1000, ms = 5421
+2s: Delta ms = 2000, ms = 5421
+4s: Delta ms = 4000, ms = 5421
+1s: Delta ms = 1000, ms = 6421
+5s: Delta ms = 5000, ms = 6421
+1s: Delta ms = 1000, ms = 7421
+2s: Delta ms = 2000, ms = 7421
+3s: Delta ms = 3000, ms = 7421
+6s: Delta ms = 6000, ms = 7421
+1s: Delta ms = 1000, ms = 8421
+7s: Delta ms = 7000, ms = 8421
+1s: Delta ms = 1000, ms = 9421
+2s: Delta ms = 2000, ms = 9421
+4s: Delta ms = 4000, ms = 9421
+8s: Delta ms = 8000, ms = 9421
+1s: Delta ms = 1000, ms = 10421
+3s: Delta ms = 3000, ms = 10421
+9s: Delta ms = 9000, ms = 10421
+1s: Delta ms = 1000, ms = 11421
+2s: Delta ms = 2000, ms = 11421
+5s: Delta ms = 5000, ms = 11421
+10s: Delta ms = 10000, ms = 11421
+simpleTimerDoingSomething2s: Delta programmed ms = 2000, actual = 10000
+1s: Delta ms = 1000, ms = 12421
+11s: Delta ms = 11000, ms = 12421
+1s: Delta ms = 1000, ms = 13421
+2s: Delta ms = 2000, ms = 13421
+3s: Delta ms = 3000, ms = 13421
+4s: Delta ms = 4000, ms = 13421
+6s: Delta ms = 6000, ms = 13421
+12s: Delta ms = 12000, ms = 13421
+1s: Delta ms = 1000, ms = 14421
+13s: Delta ms = 13000, ms = 14421
+1s: Delta ms = 1000, ms = 15421
+2s: Delta ms = 2000, ms = 15421
+7s: Delta ms = 7000, ms = 15421
+14s: Delta ms = 14000, ms = 15421
+1s: Delta ms = 1000, ms = 16421
+3s: Delta ms = 3000, ms = 16421
+5s: Delta ms = 5000, ms = 16421
+15s: Delta ms = 15000, ms = 16421
+1s: Delta ms = 1000, ms = 17421
+2s: Delta ms = 2000, ms = 17421
+4s: Delta ms = 4000, ms = 17421
+8s: Delta ms = 8000, ms = 17421
+16s: Delta ms = 16000, ms = 17421
+1s: Delta ms = 1000, ms = 18421
+1s: Delta ms = 1000, ms = 19421
+2s: Delta ms = 2000, ms = 19421
+3s: Delta ms = 3000, ms = 19421
+6s: Delta ms = 6000, ms = 19421
+9s: Delta ms = 9000, ms = 19421
+1s: Delta ms = 1000, ms = 20421
+1s: Delta ms = 1000, ms = 21421
+2s: Delta ms = 2000, ms = 21421
+4s: Delta ms = 4000, ms = 21421
+5s: Delta ms = 5000, ms = 21421
+10s: Delta ms = 10000, ms = 21421
+simpleTimerDoingSomething2s: Delta programmed ms = 2000, actual = 10000
+1s: Delta ms = 1000, ms = 22421
+3s: Delta ms = 3000, ms = 22421
+7s: Delta ms = 7000, ms = 22421
+1s: Delta ms = 1000, ms = 23421
+2s: Delta ms = 2000, ms = 23421
+11s: Delta ms = 11000, ms = 23421
+1s: Delta ms = 1000, ms = 24421
+1s: Delta ms = 1000, ms = 25421
+2s: Delta ms = 2000, ms = 25421
+3s: Delta ms = 3000, ms = 25421
+4s: Delta ms = 4000, ms = 25421
+6s: Delta ms = 6000, ms = 25421
+8s: Delta ms = 8000, ms = 25421
+12s: Delta ms = 12000, ms = 25421
+1s: Delta ms = 1000, ms = 26421
+5s: Delta ms = 5000, ms = 26421
+1s: Delta ms = 1000, ms = 27421
+2s: Delta ms = 2000, ms = 27421
+13s: Delta ms = 13000, ms = 27421
+1s: Delta ms = 1000, ms = 28421
+3s: Delta ms = 3000, ms = 28421
+9s: Delta ms = 9000, ms = 28421
+1s: Delta ms = 1000, ms = 29421
+2s: Delta ms = 2000, ms = 29421
+4s: Delta ms = 4000, ms = 29421
+7s: Delta ms = 7000, ms = 29421
+14s: Delta ms = 14000, ms = 29421
+1s: Delta ms = 1000, ms = 30421
+1s: Delta ms = 1000, ms = 31421
+2s: Delta ms = 2000, ms = 31421
+3s: Delta ms = 3000, ms = 31421
+5s: Delta ms = 5000, ms = 31421
+6s: Delta ms = 6000, ms = 31421
+10s: Delta ms = 10000, ms = 31421
+15s: Delta ms = 15000, ms = 31421
+simpleTimerDoingSomething2s: Delta programmed ms = 2000, actual = 10000
+1s: Delta ms = 1000, ms = 32421
+1s: Delta ms = 1000, ms = 33421
+2s: Delta ms = 2000, ms = 33421
+4s: Delta ms = 4000, ms = 33421
+8s: Delta ms = 8000, ms = 33421
+16s: Delta ms = 16000, ms = 33421
+1s: Delta ms = 1000, ms = 34421
+3s: Delta ms = 3000, ms = 34421
+11s: Delta ms = 11000, ms = 34421
 ```
 ---
 ---
+
+### Releases v1.0.1
+
+1. Add complicated example [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) utilizing and demonstrating the full usage of 16 independent ISR Timers.
 
 ### Releases v1.0.0
 
@@ -842,7 +978,6 @@ ITimer0: millis() = 11910, delta = 500
   - **Adafruit SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
   - **Seeeduino SAMD21/SAMD51 boards (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)** 
 
-
 ---
 ---
 
@@ -855,12 +990,11 @@ Submit issues to: [SAMD_TimerInterrupt issues](https://github.com/khoih-prog/SAM
 ## TO DO
 
 1. Search for bug and improvement.
-2. Similar features for remaining Arduino boards such as SAMD21, SAMD51, SAM-DUE, nRF52
+2. Similar features for remaining Arduino boards such as SAM-DUE
 
 
 ## DONE
 
-For current version v1.0.0
 
 1. Basic hardware timers for SAMD21 and SAMD51.
 2. More hardware-initiated software-enabled timers
@@ -888,6 +1022,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 ## Contributing
 
 If you want to contribute to this project:
+
 - Report bugs and errors
 - Ask for enhancements
 - Create issues and pull requests

@@ -19,11 +19,12 @@
    Based on BlynkTimer.h
    Author: Volodymyr Shymanskyy
 
-   Version: 1.0.0
+   Version: 1.0.1
 
    Version Modified By   Date      Comments
    ------- -----------  ---------- -----------
    1.0.0   K Hoang      30/10/2020 Initial coding
+   1.0.1   K Hoang      06/11/2020 Add complicated example ISR_16_Timers_Array using all 16 independent ISR Timers.
 *****************************************************************************************************************************/
 /*
   SAMD21
@@ -65,7 +66,7 @@
 
 #include "Arduino.h"
 
-#define SAMD_TIMER_INTERRUPT_VERSION       "1.0.0"
+#define SAMD_TIMER_INTERRUPT_VERSION       "1.0.1"
 
 #ifndef SAMD_TIMER_INTERRUPT_DEBUG
   #define SAMD_TIMER_INTERRUPT_DEBUG       0
@@ -87,9 +88,9 @@ class SAMDTimerInterrupt;
 
 typedef SAMDTimerInterrupt SAMDTimer;
 
-typedef void (*timer_callback)  (void);
+typedef void (*timerCallback)  (void);
 
-timer_callback TC3_callback;
+timerCallback TC3_callback;
 
 #define SAMD_TC3        ((TcCount16*) _SAMDTimer)
 
@@ -117,7 +118,7 @@ class SAMDTimerInterrupt
     // point to timer struct, (TcCount16*) TC3 for SAMD51
     void*           _SAMDTimer = NULL;
     
-    timer_callback  _callback;        // pointer to the callback function
+    timerCallback  _callback;        // pointer to the callback function
     float           _frequency;       // Timer frequency
     
     unsigned long   _period;
@@ -144,7 +145,7 @@ class SAMDTimerInterrupt
 
     // frequency (in hertz) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be addes in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool setFrequency(float frequency, timer_callback callback)
+    bool setFrequency(float frequency, timerCallback callback)
     {
       _period = (unsigned long) (1000000.0f / frequency);
       
@@ -189,19 +190,19 @@ class SAMDTimerInterrupt
 
     // interval (in microseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be addes in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool setInterval(unsigned long interval, timer_callback callback)
+    bool setInterval(unsigned long interval, timerCallback callback)
     {
       return setFrequency((float) (1000000.0f / interval), callback);
     }
 
-    bool attachInterrupt(float frequency, timer_callback callback)
+    bool attachInterrupt(float frequency, timerCallback callback)
     {
       return setFrequency(frequency, callback);
     }
 
     // interval (in microseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be addes in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool attachInterruptInterval(unsigned long interval, timer_callback callback)
+    bool attachInterruptInterval(unsigned long interval, timerCallback callback)
     {
       return setFrequency( (float) ( 1000000.0f / interval), callback);
     }
@@ -356,10 +357,10 @@ class SAMDTimerInterrupt;
 
 typedef SAMDTimerInterrupt SAMDTimer;
 
-typedef void (*timer_callback)  (void);
+typedef void (*timerCallback)  (void);
 
-timer_callback TC3_callback;
-timer_callback TCC_callback;
+timerCallback TC3_callback;
+timerCallback TCC_callback;
 
 #define SAMD_TC3        ((TcCount16*) _SAMDTimer)
 #define SAMD_TCC        ((Tcc*) _SAMDTimer)
@@ -408,7 +409,7 @@ class SAMDTimerInterrupt
     // point to timer struct, (TcCount16*) TC3 or (Tcc*) TCC0 for SAMD21
     void*           _SAMDTimer = NULL;
     
-    timer_callback  _callback;        // pointer to the callback function
+    timerCallback  _callback;        // pointer to the callback function
     float           _frequency;       // Timer frequency
     //uint32_t        _timerCount;      // count to activate timer
     
@@ -440,7 +441,7 @@ class SAMDTimerInterrupt
 
     // frequency (in hertz) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be addes in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool setFrequency(float frequency, timer_callback callback)
+    bool setFrequency(float frequency, timerCallback callback)
     {
       _period = (unsigned long) (1000000.0f / frequency);
       
@@ -524,19 +525,19 @@ class SAMDTimerInterrupt
 
     // interval (in microseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be addes in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool setInterval(unsigned long interval, timer_callback callback)
+    bool setInterval(unsigned long interval, timerCallback callback)
     {
       return setFrequency((float) (1000000.0f / interval), callback);
     }
 
-    bool attachInterrupt(float frequency, timer_callback callback)
+    bool attachInterrupt(float frequency, timerCallback callback)
     {
       return setFrequency(frequency, callback);
     }
 
     // interval (in microseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be addes in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool attachInterruptInterval(unsigned long interval, timer_callback callback)
+    bool attachInterruptInterval(unsigned long interval, timerCallback callback)
     {
       return setFrequency( (float) ( 1000000.0f / interval), callback);
     }
