@@ -157,7 +157,9 @@ This file must be copied into the directory:
 ---
 ---
 
-### Libraries' Patches
+### Optional Libraries' Patches
+
+##### Notes: These patches are totally optional and necessary only when you use the related Ethernet library and get certain error or issues.
 
 1. If your application requires 2K+ HTML page, the current [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) must be modified if you are using W5200/W5500 Ethernet shields. W5100 is not supported for 2K+ buffer. If you use boards requiring different CS/SS pin for W5x00 Ethernet shield, for example ESP32, ESP8266, nRF52, etc., you also have to modify the following libraries to be able to specify the CS/SS pin correctly.
 
