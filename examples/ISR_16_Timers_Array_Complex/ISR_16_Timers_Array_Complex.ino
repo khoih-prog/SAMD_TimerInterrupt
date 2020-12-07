@@ -1,13 +1,13 @@
 /****************************************************************************************************************************
    ISR_16_Timers_Array.ino
-   For NRF52 boards
+   For SAMD boards
    Written by Khoi Hoang
 
-   Built by Khoi Hoang https://github.com/khoih-prog/NRF52_TimerInterrupt
+   Built by Khoi Hoang https://github.com/khoih-prog/SAMD_TimerInterrupt
    Licensed under MIT license
-   
+
    Now even you use all these new 16 ISR-based timers,with their maximum interval practically unlimited (limited only by
-   unsigned long miliseconds), you just consume only one NRF52 timer and avoid conflicting with other cores' tasks.
+   unsigned long miliseconds), you just consume only one SAMD timer and avoid conflicting with other cores' tasks.
    The accuracy is nearly perfect compared to software timers. The most important feature is they're ISR-based timers
    Therefore, their executions are not blocked by bad-behaving functions / tasks.
    This important feature is absolutely necessary for mission-critical tasks.
@@ -47,19 +47,20 @@
    written
 */
 
-#if !(defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
-      defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || \
-      defined(NRF52840_CLUE) || defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) \
-      || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
-  #error This code is designed to run on nRF52 platform! Please check your Tools->Board setting.
+#if !( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+    || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+    || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
+    || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
+    || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
+  #error This code is designed to run on SAMD21/SAMD51 platform! Please check your Tools->Board setting.
 #endif
 
-// These define's must be placed at the beginning before #include "NRF52TimerInterrupt.h"
-// Don't define NRF52_TIMER_INTERRUPT_DEBUG > 0. Only for special ISR debugging only. Can hang the system.
-#define NRF52_TIMER_INTERRUPT_DEBUG      1
+// These define's must be placed at the beginning before #include "SAMDTimerInterrupt.h"
+// Don't define SAMD_TIMER_INTERRUPT_DEBUG > 2. Only for special ISR debugging only. Can hang the system.
+#define SAMD_TIMER_INTERRUPT_DEBUG      1
 
-#include "NRF52TimerInterrupt.h"
-#include "NRF52_ISR_Timer.h"
+#include "SAMDTimerInterrupt.h"
+#include "SAMD_ISR_Timer.h"
 
 #include <SimpleTimer.h>              // https://github.com/schinken/SimpleTimer
 
@@ -68,26 +69,34 @@
 #endif
 
 #ifndef LED_BLUE
-  #define LED_BLUE          7
+  #define LED_BLUE          2
 #endif
 
 #ifndef LED_RED
-  #define LED_RED           8
+  #define LED_RED           3
 #endif
 
 #define HW_TIMER_INTERVAL_US      10000L
 
 volatile uint32_t startMillis = 0;
 
-// Depending on the board, you can select NRF52 Hardware Timer from NRF_TIMER_1-NRF_TIMER_4 (1 to 4)
-// If you select the already-used NRF_TIMER_0, it'll be auto modified to use NRF_TIMER_1
+// You can select SAMD Hardware Timer  from SAMD_TIMER_1 or SAMD_TIMER_3
 
-// Init NRF52 timer NRF_TIMER1
-NRF52Timer ITimer(NRF_TIMER_2);
+// Depending on the board, you can select SAMD21 Hardware Timer from TC3-TCC
+// SAMD21 Hardware Timer from TC3 or TCC
+// SAMD51 Hardware Timer only TC3
 
-// Init NRF52_ISR_Timer
-// Each NRF52_ISR_Timer can service 16 different ISR-based timers
-NRF52_ISR_Timer ISR_Timer;
+// Init SAMD timer TIMER_TC3
+SAMDTimer ITimer(TIMER_TC3);
+
+#if (TIMER_INTERRUPT_USING_SAMD21)
+// Init SAMD timer TIMER_TCC
+//SAMDTimer ITimer(TIMER_TCC);
+#endif
+
+// Init SAMD_ISR_Timer
+// Each SAMD_ISR_Timer can service 16 different ISR-based timers
+SAMD_ISR_Timer ISR_Timer;
 
 #define LED_TOGGLE_INTERVAL_MS        2000L
 
@@ -300,15 +309,18 @@ void simpleTimerDoingSomething2s()
 
   unsigned long currMillis = millis();
 
-  Serial.printf("SimpleTimer : %lus, ms = %lu, Dms : %lu\n", SIMPLE_TIMER_MS / 1000, currMillis, currMillis - previousMillis);
+  Serial.println("SimpleTimer : " + String(SIMPLE_TIMER_MS / 1000) + ", ms = " + String(currMillis) 
+                     + ", Dms : " + String(currMillis - previousMillis));
 
   for (int i = 0; i < NUMBER_ISR_TIMERS; i++)
   {
 #if USE_COMPLEX_STRUCT    
-    Serial.printf("Timer : %d, programmed : %lu, actual : %lu\n", i, curISRTimerData[i].TimerInterval, curISRTimerData[i].deltaMillis);
+    Serial.println("Timer : " + String(i) + ", programmed : " + String(curISRTimerData[i].TimerInterval) 
+                              + ", actual : " + String(curISRTimerData[i].deltaMillis));
 #else
-    Serial.printf("Timer : %d, programmed : %lu, actual : %lu\n", i, TimerInterval[i], deltaMillis[i]);
-#endif    
+    Serial.println("Timer : " + String(i) + ", programmed : " + String(TimerInterval[i]) 
+                              + ", actual : " + String(deltaMillis[i]));
+#endif   
   }
 
   previousMillis = currMillis;
@@ -329,11 +341,13 @@ void setup()
   if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_US, TimerHandler))
   {
     startMillis = millis();
-    Serial.printf("Starting  ITimer OK, millis() = %ld\n", startMillis);
+    Serial.println("Starting  ITimer OK, millis() = " + String(startMillis));
   }
   else
     Serial.println("Can't set ITimer correctly. Select another freq. or interval");
 
+  startMillis = millis();
+  
   // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
   // You can use up to 16 timer for each ISR_Timer
   for (int i = 0; i < NUMBER_ISR_TIMERS; i++)
@@ -342,7 +356,7 @@ void setup()
     curISRTimerData[i].previousMillis = startMillis;
     ISR_Timer.setInterval(curISRTimerData[i].TimerInterval, curISRTimerData[i].irqCallbackFunc);
 #else
-    previousMillis[i] = startMillis;
+    previousMillis[i] = millis();
     ISR_Timer.setInterval(TimerInterval[i], irqCallbackFunc[i]);
 #endif    
   }
