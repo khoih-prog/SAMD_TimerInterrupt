@@ -44,6 +44,11 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 ---
 ---
 
+### Releases v1.1.1
+
+1. Add example [**Change_Interval**](examples/Change_Interval) and [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex)
+2. Bump up version to sync with other TimerInterrupt Libraries. Modify Version String.
+
 ### Releases v1.0.1
 
 1. Add complicated example [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) utilizing and demonstrating the full usage of 16 independent ISR Timers.
@@ -63,7 +68,7 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 ---
 ---
 
-## Prerequisite
+## Prerequisites
 
  1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino SAMD core v1.8.9+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards (Nano 33 IoT, etc.).
@@ -101,7 +106,7 @@ Another way to install is to:
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**SAMD_TimerInterrupt** library](https://platformio.org/lib/show/11396/SAMD_TimerInterrupt) by using [Library Manager](https://platformio.org/lib/show/11396/SAMD_TimerInterrupt/installation). Search for **SAMD_TimerInterrupt** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**SAMD_TimerInterrupt** library](https://platformio.org/lib/show/11396/SAMD_TimerInterrupt) or [**SAMD_TimerInterrupt** library](https://platformio.org/lib/show/11396/SAMD_TimerInterrupt) by using [Library Manager](https://platformio.org/lib/show/11412/SAMD_TimerInterrupt/installation). Search for **SAMD_TimerInterrupt** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 ---
@@ -383,7 +388,9 @@ void setup()
  7. [SwitchDebounce](examples/SwitchDebounce)
  8. [TimerInterruptTest](examples/TimerInterruptTest)
  9. [TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
-
+10. [**Change_Interval**](examples/Change_Interval). New
+11. [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex). New
+ 
 
 ---
 ---
@@ -591,7 +598,8 @@ void setup()
   while (!Serial);
   
   Serial.println("\nStarting ISR_Timer_Complex_WiFiNINA on " + String(BOARD_NAME));
-  Serial.println("Version : " + String(SAMD_TIMER_INTERRUPT_VERSION));
+  Serial.println(SAMD_TIMER_INTERRUPT_VERSION);
+  Serial.println("CPU Frequency = " + String(F_CPU / 1000000) + " MHz");
 
   // You need this timer for non-critical tasks. Avoid abusing ISR if not absolutely necessary.
   blynkTimer.setInterval(BLYNK_TIMER_MS, blynkDoingSomething2s);
@@ -664,7 +672,8 @@ While software timer, **programmed for 2s, is activated after 7.937s !!!**. Then
 
 ```
 Starting ISR_Timer_Complex_WiFiNINA on SAMD_NANO_33_IOT
-Version : 1.0.1
+SAMDTimerInterrupt v1.1.1
+CPU Frequency = 48 MHz
 F_CPU (MHz) = 48, TIMER_HZ = 48
 TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
 Starting  ITimer OK, millis() = 810
@@ -726,7 +735,8 @@ blynkDoingSomething2s: Delta programmed ms = 2000, actual = 3002
 
 ```
 Starting TimerInterruptTest on ITSYBITSY_M4
-Version : 1.0.1
+SAMDTimerInterrupt v1.1.1
+CPU Frequency = 48 MHz
 F_CPU (MHz) = 120, TIMER_HZ = 48
 TC_Timer::startTimer _Timer = 0x4101c000, TC3 = 0x4101c000
 Starting  ITimer1 OK, millis() = 1820
@@ -801,7 +811,8 @@ ITimer0: millis() = 91018, delta = 1000
 
 ```
 Starting Argument_None on SAMD_NANO_33_IOT
-Version : 1.0.1
+SAMDTimerInterrupt v1.1.1
+CPU Frequency = 48 MHz
 F_CPU (MHz) = 48, TIMER_HZ = 48
 TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
 Starting  ITimer1 OK, millis() = 910
@@ -846,7 +857,8 @@ In this example, 16 independent ISR Timers are used, yet utilized just one Hardw
 
 ```
 Starting ISR_16_Timers_Array on SAMD_NANO_33_IOT
-Version : 1.0.1
+SAMDTimerInterrupt v1.1.1
+CPU Frequency = 48 MHz
 CPU Frequency = 48 MHz
 F_CPU (MHz) = 48, TIMER_HZ = 48
 TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
@@ -961,8 +973,75 @@ simpleTimerDoingSomething2s: Delta programmed ms = 2000, actual = 10000
 3s: Delta ms = 3000, ms = 34421
 11s: Delta ms = 11000, ms = 34421
 ```
+
+---
+
+5. The following is the sample terminal output when running example [Change_Interval](examples/Change_Interval) to demonstrate how to change Timer Interval on-the-fly
+
+```
+Starting Change_Interval on SAMD_NANO_33_IOT
+SAMDTimerInterrupt v1.1.1
+CPU Frequency = 48 MHz
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Starting  ITimer OK, millis() = 1131
+Time = 10001, TimerCount = 17
+Time = 20002, TimerCount = 37
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Changing Interval, Timer = 1000
+Time = 30003, TimerCount = 47
+Time = 40004, TimerCount = 57
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Changing Interval, Timer = 500
+Time = 50005, TimerCount = 77
+Time = 60006, TimerCount = 97
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Changing Interval, Timer = 1000
+Time = 70007, TimerCount = 107
+Time = 80008, TimerCount = 117
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Changing Interval, Timer = 500
+Time = 90009, TimerCount = 137
+Time = 100010, TimerCount = 157
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Changing Interval, Timer = 1000
+Time = 110011, TimerCount = 167
+Time = 120012, TimerCount = 177
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Changing Interval, Timer = 500
+Time = 130013, TimerCount = 197
+Time = 140014, TimerCount = 217
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Changing Interval, Timer = 1000
+Time = 150015, TimerCount = 227
+Time = 160016, TimerCount = 237
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Changing Interval, Timer = 500
+Time = 170017, TimerCount = 257
+Time = 180018, TimerCount = 277
+F_CPU (MHz) = 48, TIMER_HZ = 48
+TC_Timer::startTimer _Timer = 0x42002c00, TC3 = 0x42002c00
+Changing Interval, Timer = 1000
+Time = 190019, TimerCount = 287
+Time = 200020, TimerCount = 297
+
+```
+
 ---
 ---
+
+### Releases v1.1.1
+
+1. Add example [**Change_Interval**](examples/Change_Interval) and [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex)
+2. Bump up version to sync with other TimerInterrupt Libraries. Modify Version String.
 
 ### Releases v1.0.1
 
