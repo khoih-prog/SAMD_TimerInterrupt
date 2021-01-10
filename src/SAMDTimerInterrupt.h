@@ -1,31 +1,32 @@
 /****************************************************************************************************************************
-   SAMDTimerInterrupt.h
-   For SAMD boards
-   Written by Khoi Hoang
+  SAMDTimerInterrupt.h
+  For SAMD boards
+  Written by Khoi Hoang
 
-   Built by Khoi Hoang https://github.com/khoih-prog/SAMD_TimerInterrupt
-   Licensed under MIT license
+  Built by Khoi Hoang https://github.com/khoih-prog/SAMD_TimerInterrupt
+  Licensed under MIT license
 
-   Now even you use all these new 16 ISR-based timers,with their maximum interval practically unlimited (limited only by
-   unsigned long miliseconds), you just consume only one SAMD timer and avoid conflicting with other cores' tasks.
-   The accuracy is nearly perfect compared to software timers. The most important feature is they're ISR-based timers
-   Therefore, their executions are not blocked by bad-behaving functions / tasks.
-   This important feature is absolutely necessary for mission-critical tasks.
+  Now even you use all these new 16 ISR-based timers,with their maximum interval practically unlimited (limited only by
+  unsigned long miliseconds), you just consume only one SAMD timer and avoid conflicting with other cores' tasks.
+  The accuracy is nearly perfect compared to software timers. The most important feature is they're ISR-based timers
+  Therefore, their executions are not blocked by bad-behaving functions / tasks.
+  This important feature is absolutely necessary for mission-critical tasks.
 
-   Based on SimpleTimer - A timer library for Arduino.
-   Author: mromani@ottotecnica.com
-   Copyright (c) 2010 OTTOTECNICA Italy
+  Based on SimpleTimer - A timer library for Arduino.
+  Author: mromani@ottotecnica.com
+  Copyright (c) 2010 OTTOTECNICA Italy
 
-   Based on BlynkTimer.h
-   Author: Volodymyr Shymanskyy
+  Based on BlynkTimer.h
+  Author: Volodymyr Shymanskyy
 
-   Version: 1.1.1
+  Version: 1.2.0
 
-   Version Modified By   Date      Comments
-   ------- -----------  ---------- -----------
-   1.0.0   K Hoang      30/10/2020 Initial coding
-   1.0.1   K Hoang      06/11/2020 Add complicated example ISR_16_Timers_Array using all 16 independent ISR Timers.
-   1.1.1   K.Hoang      06/12/2020 Add Change_Interval example. Bump up version to sync with other TimerInterrupt Libraries
+  Version Modified By   Date      Comments
+  ------- -----------  ---------- -----------
+  1.0.0   K Hoang      30/10/2020 Initial coding
+  1.0.1   K Hoang      06/11/2020 Add complicated example ISR_16_Timers_Array using all 16 independent ISR Timers.
+  1.1.1   K.Hoang      06/12/2020 Add Change_Interval example. Bump up version to sync with other TimerInterrupt Libraries
+  1.2.0   K.Hoang      08/01/2021 Add better debug feature. Optimize code and examples to reduce RAM usage
 *****************************************************************************************************************************/
 /*
   SAMD21
@@ -67,11 +68,11 @@
 
 #include "Arduino.h"
 
-#define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.1.1"
-
-#ifndef SAMD_TIMER_INTERRUPT_DEBUG
-  #define SAMD_TIMER_INTERRUPT_DEBUG       0
+#ifndef SAMD_TIMER_INTERRUPT_VERSION
+  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.2.0"
 #endif
+
+#include "TimerInterrupt_Generic_Debug.h"
 
 #define TIMER_HZ      48000000L
 
@@ -89,7 +90,7 @@ class SAMDTimerInterrupt;
 
 typedef SAMDTimerInterrupt SAMDTimer;
 
-typedef void (*timerCallback)  (void);
+typedef void (*timerCallback)  ();
 
 timerCallback TC3_callback;
 
@@ -152,10 +153,8 @@ class SAMDTimerInterrupt
       
       if (_timerNumber == TIMER_TC3)
       {    
-#if (SAMD_TIMER_INTERRUPT_DEBUG > 0)
-        Serial.println("F_CPU (MHz) = " + String(F_CPU/1000000) + ", TIMER_HZ = " + String(TIMER_HZ/1000000));
-        Serial.println("TC_Timer::startTimer _Timer = 0x" + String((uint32_t) _SAMDTimer, HEX) + ", TC3 = 0x" + String((uint32_t) TC3, HEX));     
-#endif  
+        TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU/1000000, F(", TIMER_HZ ="), TIMER_HZ/1000000);
+        TISR_LOGWARN3(F("TC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TC3 = 0x"), String((uint32_t) TC3, HEX));
 
         // Enable the TC bus clock, use clock generator 0
         GCLK->PCHCTRL[TC3_GCLK_ID].reg = GCLK_PCHCTRL_GEN_GCLK1_Val | (1 << GCLK_PCHCTRL_CHEN_Pos);
@@ -217,7 +216,7 @@ class SAMDTimerInterrupt
       }
     }
 
-    void disableTimer(void)
+    void disableTimer()
     {
       // Disable Timer
       if (_timerNumber == TIMER_TC3)
@@ -238,7 +237,7 @@ class SAMDTimerInterrupt
     }
 
     // Duration (in milliseconds). Duration = 0 or not specified => run indefinitely
-    void enableTimer(void)
+    void enableTimer()
     {     
       // Enable Timer
       if (_timerNumber == TIMER_TC3)
@@ -249,14 +248,14 @@ class SAMDTimerInterrupt
     }
 
     // Just stop clock source, clear the count
-    void stopTimer(void)
+    void stopTimer()
     {
       // TODO, clear the count
       disableTimer();
     }
 
     // Just reconnect clock source, start current count from 0
-    void restartTimer(void)
+    void restartTimer()
     {
       // TODO, clear the count
       enableTimer();
@@ -358,7 +357,7 @@ class SAMDTimerInterrupt;
 
 typedef SAMDTimerInterrupt SAMDTimer;
 
-typedef void (*timerCallback)  (void);
+typedef void (*timerCallback)  ();
 
 timerCallback TC3_callback;
 timerCallback TCC_callback;
@@ -451,12 +450,10 @@ class SAMDTimerInterrupt
         REG_GCLK_CLKCTRL = (uint16_t) (GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID (GCM_TCC2_TC3));
         
         while ( GCLK->STATUS.bit.SYNCBUSY == 1 );
+        
+        TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU/1000000, F(", TIMER_HZ ="), TIMER_HZ/1000000);
+        TISR_LOGWARN3(F("TC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TC3 = 0x"), String((uint32_t) TC3, HEX));
        
-#if (SAMD_TIMER_INTERRUPT_DEBUG > 0)
-        Serial.println("F_CPU (MHz) = " + String(F_CPU/1000000) + ", TIMER_HZ = " + String(TIMER_HZ/1000000));
-        Serial.println("TC_Timer::startTimer _Timer = 0x" + String((uint32_t) _SAMDTimer, HEX) + ", TC3 = 0x" + String((uint32_t) TC3, HEX));     
-#endif  
-
         SAMD_TC3->CTRLA.reg &= ~TC_CTRLA_ENABLE;
 
         // Use the 16-bit timer
@@ -489,12 +486,10 @@ class SAMDTimerInterrupt
         REG_GCLK_CLKCTRL = (uint16_t) (GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID(GCM_TCC0_TCC1));
 	    
 	      while ( GCLK->STATUS.bit.SYNCBUSY == 1 );
-
-#if (SAMD_TIMER_INTERRUPT_DEBUG > 0)
-        Serial.println("F_CPU (MHz) = " + String(F_CPU/1000000) + ", TIMER_HZ = " + String(TIMER_HZ/1000000));
-        Serial.println("TC_Timer::startTimer _Timer = 0x" + String((uint32_t) _SAMDTimer, HEX) + ", TCC0 = 0x" + String((uint32_t) TCC0, HEX));     
-#endif 
-        
+	      
+	      TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU/1000000, F(", TIMER_HZ ="), TIMER_HZ/1000000);
+        TISR_LOGWARN3(F("TC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TCC0 = 0x"), String((uint32_t) TCC0, HEX));
+       
         SAMD_TCC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;   // Disable TC
         
         while (SAMD_TCC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
@@ -556,7 +551,7 @@ class SAMDTimerInterrupt
       }
     }
 
-    void disableTimer(void)
+    void disableTimer()
     {
       // Disable Timer
       if (_timerNumber == TIMER_TC3)
@@ -586,7 +581,7 @@ class SAMDTimerInterrupt
     }
 
     // Duration (in milliseconds). Duration = 0 or not specified => run indefinitely
-    void enableTimer(void)
+    void enableTimer()
     {     
       // Enable Timer
       if (_timerNumber == TIMER_TC3)
@@ -602,14 +597,14 @@ class SAMDTimerInterrupt
     }
 
     // Just stop clock source, clear the count
-    void stopTimer(void)
+    void stopTimer()
     {
       // TODO, clear the count
       disableTimer();
     }
 
     // Just reconnect clock source, start current count from 0
-    void restartTimer(void)
+    void restartTimer()
     {
       // TODO, clear the count
       enableTimer();
