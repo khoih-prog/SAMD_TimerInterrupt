@@ -17,6 +17,7 @@
   * [Currently supported Boards](#currently-supported-boards)
   * [Important Notes about ISR](#important-notes-about-isr)
 * [Changelog](#changelog)
+  * [Releases v1.3.0](#releases-v130)
   * [Releases v1.2.0](#releases-v120)
   * [Releases v1.1.1](#releases-v111)
   * [Releases v1.0.1](#releases-v101)
@@ -87,7 +88,7 @@
 
 ### Features
 
-This library enables you to use Interrupt from Hardware Timers on an SAMD-based board, such as SAMD21 Nano-33-IoT, Adafruit SAMD51 Itsy-Bitsy M4, etc.
+This library enables you to use Interrupt from Hardware Timers on an SAMD-based board, such as SAMD21 Nano-33-IoT, Adafruit SAMD51 Itsy-Bitsy M4, SparkFun SAMD51 MicroMod, etc.
 
 As **Hardware Timers are rare, and very precious assets** of any board, this library now enables you to use up to **16 ISR-based Timers, while consuming only 1 Hardware Timer**. Timers' interval is very long (**ulong millisecs**).
 
@@ -130,7 +131,8 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
   - **Adafruit SAM21 (Itsy-Bitsy M0, Metro M0, Feather M0, Gemma M0, etc.)**.
   - **Adafruit SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
   - **Seeeduino SAMD21/SAMD51 boards (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)** 
-
+  - **Sparkfun SAMD21 boards** such as **SparkFun_RedBoard_Turbo, SparkFun_Qwiic_Micro, etc.**
+  - **Sparkfun SAMD51 boards** such as **SparkFun_SAMD51_Thing_Plus, SparkFun_SAMD51_MicroMod, etc.**
 ---
 
 ### Important Notes about ISR
@@ -143,6 +145,12 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 ---
 
 ## Changelog
+
+### Releases v1.3.0
+
+1. Add support to **Sparkfun SAMD21 boards** such as **SparkFun_RedBoard_Turbo, SparkFun_Qwiic_Micro, etc.**
+2. Add support to **Sparkfun SAMD51 boards** such as **SparkFun_SAMD51_Thing_Plus, SparkFun_SAMD51_MicroMod, etc.**
+3. Update examples to support Sparkfun boards.
 
 ### Releases v1.2.0
 
@@ -173,8 +181,9 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
  2. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
  3. [`Adafruit SAMD core 1.6.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  4. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
- 5. [`Blynk library 0.6.1+`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with certain example.
- 6. To use with certain example, depending on which Ethernet card you're using:
+ 5. [`Sparkfun SAMD core 1.8.1+`](https://github.com/sparkfun/Arduino_Boards) for SAMD21/SAMD51 boards (SparkFun_RedBoard_Turbo, SparkFun_SAMD51_Thing_Plus, etc.).
+ 6. [`Blynk library 0.6.1+`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with certain example.
+ 7. To use with certain example, depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://github.com/arduino-libraries/Ethernet) for W5100, W5200 and W5500.  [![GitHub release](https://img.shields.io/github/release/arduino-libraries/Ethernet.svg)](https://github.com/arduino-libraries/Ethernet/releases/latest)
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500. [![GitHub release](https://img.shields.io/github/release/adafruit/Ethernet2.svg)](https://github.com/adafruit/Ethernet2/releases/latest)
@@ -182,7 +191,7 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
    - [`EthernetENC library v2.0.0+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.9+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
  7. To use with certain example
-   - [`SimpleTimer library`](https://github.com/schinken/SimpleTimer) for [ISR_16_Timers_Array example](examples/ISR_16_Timers_Array).
+   - [`SimpleTimer library`](https://github.com/jfturcot/SimpleTimer) for [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) and [ISR_16_Timers_Array_Complex](examples/ISR_16_Timers_Array_Complex) examples. New to avoid error with `old` Sparkfun core.
 ---
 ---
 
@@ -803,7 +812,7 @@ While software timer, **programmed for 2s, is activated after 7.937s !!!**. Then
 
 ```
 Starting ISR_Timer_Complex_WiFiNINA on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.2.0
+SAMDTimerInterrupt v1.3.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -868,7 +877,7 @@ The following is the sample terminal output when running example [**TimerInterru
 
 ```
 Starting TimerInterruptTest on ITSYBITSY_M4
-SAMDTimerInterrupt v1.2.0
+SAMDTimerInterrupt v1.3.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 120 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 0x4101c000 , TC3 = 0x 0x4101c000
@@ -946,7 +955,7 @@ The following is the sample terminal output when running example [**Argument_Non
 
 ```
 Starting Argument_None on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.2.0
+SAMDTimerInterrupt v1.3.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -996,7 +1005,7 @@ In this example, 16 independent ISR Timers are used, yet utilized just one Hardw
 
 ```
 Starting ISR_16_Timers_Array on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.2.0
+SAMDTimerInterrupt v1.3.0
 CPU Frequency = 48 MHz
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
@@ -1121,7 +1130,7 @@ The following is the sample terminal output when running example [Change_Interva
 
 ```
 Starting Change_Interval on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.2.0
+SAMDTimerInterrupt v1.3.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -1206,6 +1215,12 @@ Sometimes, the library will only work if you update the board core to the latest
 
 ## Releases
 
+### Releases v1.3.0
+
+1. Add support to **Sparkfun SAMD21 boards** such as **SparkFun_RedBoard_Turbo, SparkFun_Qwiic_Micro, etc.**
+2. Add support to **Sparkfun SAMD51 boards** such as **SparkFun_SAMD51_Thing_Plus, SparkFun_SAMD51_MicroMod, etc.**
+3. Update examples to support Sparkfun boards.
+
 ### Releases v1.2.0
 
 1. Add better debug feature.
@@ -1232,6 +1247,8 @@ Sometimes, the library will only work if you update the board core to the latest
   - **Adafruit SAM21 (Itsy-Bitsy M0, Metro M0, Feather M0, Gemma M0, etc.)**.
   - **Adafruit SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
   - **Seeeduino SAMD21/SAMD51 boards (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)** 
+  - **Sparkfun SAMD21 boards** such as **SparkFun_RedBoard_Turbo, SparkFun_Qwiic_Micro, etc.**
+  - **Sparkfun SAMD51 boards** such as **SparkFun_SAMD51_Thing_Plus, SparkFun_SAMD51_MicroMod, etc.**
 
 ---
 ---

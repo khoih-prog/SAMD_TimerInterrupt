@@ -19,7 +19,7 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
 
-  Version: 1.2.0
+  Version: 1.3.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -27,6 +27,7 @@
   1.0.1   K Hoang      06/11/2020 Add complicated example ISR_16_Timers_Array using all 16 independent ISR Timers.
   1.1.1   K.Hoang      06/12/2020 Add Change_Interval example. Bump up version to sync with other TimerInterrupt Libraries
   1.2.0   K.Hoang      08/01/2021 Add better debug feature. Optimize code and examples to reduce RAM usage
+  1.3.0   K.Hoang      02/04/2021 Add support to Sparkfun SAMD21 and SAMD51 boards
 *****************************************************************************************************************************/
 /*
   SAMD21
@@ -57,19 +58,48 @@
     || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
     || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
     || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD21G18A__) )
+     
   #define TIMER_INTERRUPT_USING_SAMD21      true
+  
+  #if defined(ARDUINO_QWIIC_MICRO)
+    #define BOARD_NAME    "Sparkfun SAMD21_QWIIC_MICRO"
+    #warning BOARD_NAME == Sparkfun SAMD21_QWIIC_MICRO
+  #endif
+  
+  #if !defined(BOARD_NAME)
+    #define BOARD_NAME    "Unknown SAMD21"
+  #endif
+  
   #warning Using SAMD21 Hardware Timer
 #elif ( defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) )
   #define TIMER_INTERRUPT_USING_SAMD51      true
+  
+  #if defined(ARDUINO_SAMD51_THING_PLUS)
+    #define BOARD_NAME    "Sparkfun SAMD51_THING_PLUS"
+    #warning BOARD_NAME == Sparkfun SAMD51_THING_PLUS
+  #elif defined(ARDUINO_SAMD51_MICROMOD)
+    #define BOARD_NAME    "Sparkfun SAMD51_MICROMOD"
+    #warning BOARD_NAME == Sparkfun SAMD51_MICROMOD
+  #endif
+  
+  #if !defined(BOARD_NAME)
+    #define BOARD_NAME    "Unknown SAMD51"
+  #endif
+  
   #warning Using SAMD51 Hardware Timer
 #else
   #error Unknown board  
 #endif
 
+// Specific for SAMD21 SparkFun RedBoard Turbo
+#if !defined(Serial) && defined(ARDUINO_SAMD_ZERO)
+  #define Serial    SerialUSB
+#endif
+
 #include "Arduino.h"
 
 #ifndef SAMD_TIMER_INTERRUPT_VERSION
-  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.2.0"
+  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.3.0"
 #endif
 
 #include "TimerInterrupt_Generic_Debug.h"
