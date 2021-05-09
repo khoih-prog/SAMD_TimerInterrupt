@@ -19,7 +19,7 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
 
-  Version: 1.3.0
+  Version: 1.3.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,6 +28,7 @@
   1.1.1   K.Hoang      06/12/2020 Add Change_Interval example. Bump up version to sync with other TimerInterrupt Libraries
   1.2.0   K.Hoang      08/01/2021 Add better debug feature. Optimize code and examples to reduce RAM usage
   1.3.0   K.Hoang      02/04/2021 Add support to Sparkfun SAMD21 and SAMD51 boards
+  1.3.1   K.Hoang      09/05/2021 Fix compile error to some SAMD21-based boards
 *****************************************************************************************************************************/
 /*
   SAMD21
@@ -91,15 +92,20 @@
   #error Unknown board  
 #endif
 
-// Specific for SAMD21 SparkFun RedBoard Turbo
-#if !defined(Serial) && defined(ARDUINO_SAMD_ZERO)
-  #define Serial    SerialUSB
+// Too many boards sharing the same ARDUINO_SAMD_ZERO but very different, such as SAMD21 SparkFun RedBoard Turbo
+// Have to exclude some from the list
+#if ( defined(ARDUINO_SAMD_ZERO) && ! ( defined(ADAFRUIT_FEATHER_M0) || defined(ARDUINO_SAMD_FEATHER_M0) || defined(ADAFRUIT_METRO_M0_EXPRESS) || \
+      defined(ARDUINO_SAMD_HALLOWING_M0) || defined(ADAFRUIT_BLM_BADGE) ) )
+  // Specific for SAMD21 SparkFun RedBoard Turbo
+  #if !defined(Serial)
+    #define Serial    SerialUSB
+  #endif
 #endif
 
 #include "Arduino.h"
 
 #ifndef SAMD_TIMER_INTERRUPT_VERSION
-  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.3.0"
+  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.3.1"
 #endif
 
 #include "TimerInterrupt_Generic_Debug.h"

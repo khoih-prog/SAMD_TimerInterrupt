@@ -17,6 +17,7 @@
   * [Currently supported Boards](#currently-supported-boards)
   * [Important Notes about ISR](#important-notes-about-isr)
 * [Changelog](#changelog)
+  * [Releases v1.3.1](#releases-v131)
   * [Releases v1.3.0](#releases-v130)
   * [Releases v1.2.0](#releases-v120)
   * [Releases v1.1.1](#releases-v111)
@@ -52,16 +53,17 @@
     * [2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions](#22-set-hardware-timer-interval-and-attach-timer-interrupt-handler-functions)
 * [Examples](#examples)
   * [  1. Argument_None](examples/Argument_None)
-  * [  2. ISR_16_Timers_Array](examples/ISR_16_Timers_Array)
-  * [  3. ISR_RPM_Measure](examples/ISR_RPM_Measure)
-  * [  4. ISR_Timer_Complex_Ethernet](examples/ISR_Timer_Complex_Ethernet)
-  * [  5. ISR_Timer_Complex_WiFiNINA](examples/ISR_Timer_Complex_WiFiNINA)
-  * [  6. RPM_Measure](examples/RPM_Measure)
-  * [  7. SwitchDebounce](examples/SwitchDebounce)
-  * [  8. TimerInterruptTest](examples/TimerInterruptTest)
-  * [  9. TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
-  * [ 10. **Change_Interval**](examples/Change_Interval)
-  * [ 11. **ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex)
+  * [  2. Argument_None_uS](examples/Argument_None_uS)
+  * [  3. ISR_16_Timers_Array](examples/ISR_16_Timers_Array)
+  * [  4. ISR_RPM_Measure](examples/ISR_RPM_Measure)
+  * [  5. ISR_Timer_Complex_Ethernet](examples/ISR_Timer_Complex_Ethernet)
+  * [  6. ISR_Timer_Complex_WiFiNINA](examples/ISR_Timer_Complex_WiFiNINA)
+  * [  7. RPM_Measure](examples/RPM_Measure)
+  * [  8. SwitchDebounce](examples/SwitchDebounce)
+  * [  9. TimerInterruptTest](examples/TimerInterruptTest)
+  * [ 10. TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
+  * [ 11. **Change_Interval**](examples/Change_Interval)
+  * [ 12. **ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex)
 * [Example ISR_Timer_Complex_WiFiNINA](#example-isr_timer_complex_wifinina)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. ISR_Timer_Complex_WiFiNINA on Arduino SAMD21 SAMD_NANO_33_IOT using WiFiNINA](#1-isr_timer_complex_wifinina-on-arduino-samd21-samd_nano_33_iot-using-wifinina)
@@ -146,6 +148,11 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 
 ## Changelog
 
+### Releases v1.3.1
+
+1. Fix compile error to some SAMD21-based boards, such as ADAFRUIT_FEATHER_M0, ARDUINO_SAMD_FEATHER_M0, ADAFRUIT_METRO_M0_EXPRESS, ARDUINO_SAMD_HALLOWING_M0 and ADAFRUIT_BLM_BADGE
+
+
 ### Releases v1.3.0
 
 1. Add support to **Sparkfun SAMD21 boards** such as **SparkFun_RedBoard_Turbo, SparkFun_Qwiic_Micro, etc.**
@@ -179,16 +186,16 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 
  1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 3. [`Adafruit SAMD core 1.6.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 3. [`Adafruit SAMD core 1.6.7+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  4. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  5. [`Sparkfun SAMD core 1.8.1+`](https://github.com/sparkfun/Arduino_Boards) for SAMD21/SAMD51 boards (SparkFun_RedBoard_Turbo, SparkFun_SAMD51_Thing_Plus, etc.).
- 6. [`Blynk library 0.6.1+`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with certain example.
+ 6. [`Blynk library 0.6.1`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with certain example. Don't use Blynk beta versions.
  7. To use with certain example, depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://github.com/arduino-libraries/Ethernet) for W5100, W5200 and W5500.  [![GitHub release](https://img.shields.io/github/release/arduino-libraries/Ethernet.svg)](https://github.com/arduino-libraries/Ethernet/releases/latest)
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500. [![GitHub release](https://img.shields.io/github/release/adafruit/Ethernet2.svg)](https://github.com/adafruit/Ethernet2/releases/latest)
    - [`Ethernet3 library v1.5.5+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip. [![GitHub release](https://img.shields.io/github/release/sstaub/Ethernet3.svg)](https://github.com/sstaub/Ethernet3/releases/latest)
-   - [`EthernetENC library v2.0.0+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
+   - [`EthernetENC library v2.0.1+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.9+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
  7. To use with certain example
    - [`SimpleTimer library`](https://github.com/jfturcot/SimpleTimer) for [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) and [ISR_16_Timers_Array_Complex](examples/ISR_16_Timers_Array_Complex) examples. New to avoid error with `old` Sparkfun core.
@@ -512,16 +519,17 @@ void setup()
 ### Examples: 
 
  1. [Argument_None](examples/Argument_None)
- 2. [ISR_16_Timers_Array](examples/ISR_16_Timers_Array)
- 3. [ISR_RPM_Measure](examples/ISR_RPM_Measure)
- 4. [ISR_Timer_Complex_Ethernet](examples/ISR_Timer_Complex_Ethernet)
- 5. [ISR_Timer_Complex_WiFiNINA](examples/ISR_Timer_Complex_WiFiNINA)
- 6. [RPM_Measure](examples/RPM_Measure)
- 7. [SwitchDebounce](examples/SwitchDebounce)
- 8. [TimerInterruptTest](examples/TimerInterruptTest)
- 9. [TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
-10. [**Change_Interval**](examples/Change_Interval). New
-11. [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex). New
+ 2. [**Argument_None_uS**](examples/Argument_None_uS). New
+ 3. [ISR_16_Timers_Array](examples/ISR_16_Timers_Array)
+ 4. [ISR_RPM_Measure](examples/ISR_RPM_Measure)
+ 5. [ISR_Timer_Complex_Ethernet](examples/ISR_Timer_Complex_Ethernet)
+ 6. [ISR_Timer_Complex_WiFiNINA](examples/ISR_Timer_Complex_WiFiNINA)
+ 7. [RPM_Measure](examples/RPM_Measure)
+ 8. [SwitchDebounce](examples/SwitchDebounce)
+ 9. [TimerInterruptTest](examples/TimerInterruptTest)
+10. [TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
+11. [**Change_Interval**](examples/Change_Interval). New
+12. [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex). New
  
 
 ---
@@ -812,7 +820,7 @@ While software timer, **programmed for 2s, is activated after 7.937s !!!**. Then
 
 ```
 Starting ISR_Timer_Complex_WiFiNINA on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.3.0
+SAMDTimerInterrupt v1.3.1
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -877,7 +885,7 @@ The following is the sample terminal output when running example [**TimerInterru
 
 ```
 Starting TimerInterruptTest on ITSYBITSY_M4
-SAMDTimerInterrupt v1.3.0
+SAMDTimerInterrupt v1.3.1
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 120 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 0x4101c000 , TC3 = 0x 0x4101c000
@@ -955,7 +963,7 @@ The following is the sample terminal output when running example [**Argument_Non
 
 ```
 Starting Argument_None on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.3.0
+SAMDTimerInterrupt v1.3.1
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -1005,7 +1013,7 @@ In this example, 16 independent ISR Timers are used, yet utilized just one Hardw
 
 ```
 Starting ISR_16_Timers_Array on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.3.0
+SAMDTimerInterrupt v1.3.1
 CPU Frequency = 48 MHz
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
@@ -1130,7 +1138,7 @@ The following is the sample terminal output when running example [Change_Interva
 
 ```
 Starting Change_Interval on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.3.0
+SAMDTimerInterrupt v1.3.1
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -1215,6 +1223,10 @@ Sometimes, the library will only work if you update the board core to the latest
 
 ## Releases
 
+### Releases v1.3.1
+
+1. Fix compile error to some SAMD21-based boards, such as ADAFRUIT_FEATHER_M0, ARDUINO_SAMD_FEATHER_M0, ADAFRUIT_METRO_M0_EXPRESS, ARDUINO_SAMD_HALLOWING_M0 and ADAFRUIT_BLM_BADGE
+
 ### Releases v1.3.0
 
 1. Add support to **Sparkfun SAMD21 boards** such as **SparkFun_RedBoard_Turbo, SparkFun_Qwiic_Micro, etc.**
@@ -1284,11 +1296,13 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 
 1. Use some code from the [**Tamasa's ZeroTimer Library**](https://github.com/EHbtj/ZeroTimer).
 2. Use some code from the [**Dennis van Gils' SAMD51_InterruptTimer Library**](https://github.com/Dennis-van-Gils/SAMD51_InterruptTimer).
+3. Thanks to [generationmake](https://github.com/generationmake) to report the issue [Doesn't compile with Adafruit Feather M0 #2](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/2) leading to new release v1.3.1.
 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/EHbtj"><img src="https://github.com/EHbtj.png" width="100px;" alt="EHbtj"/><br /><sub><b>⭐️ Tamasa</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/Dennis-van-Gils"><img src="https://github.com/Dennis-van-Gils.png" width="100px;" alt="Dennis-van-Gils"/><br /><sub><b> Dennis van Gils</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/generationmake"><img src="https://github.com/generationmake.png" width="100px;" alt="generationmake"/><br /><sub><b>generationmake</b></sub></a><br /></td>
   </tr> 
 </table>
 
