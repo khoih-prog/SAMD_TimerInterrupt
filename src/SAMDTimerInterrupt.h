@@ -19,7 +19,7 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
 
-  Version: 1.3.1
+  Version: 1.4.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,6 +29,7 @@
   1.2.0   K.Hoang      08/01/2021 Add better debug feature. Optimize code and examples to reduce RAM usage
   1.3.0   K.Hoang      02/04/2021 Add support to Sparkfun SAMD21 and SAMD51 boards
   1.3.1   K.Hoang      09/05/2021 Fix compile error to some SAMD21-based boards
+  1.4.0   K.Hoang      02/06/2021 Fix SAMD21 rare bug caused by not fully init Prescaler
 *****************************************************************************************************************************/
 /*
   SAMD21
@@ -105,7 +106,7 @@
 #include "Arduino.h"
 
 #ifndef SAMD_TIMER_INTERRUPT_VERSION
-  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.3.1"
+  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.4.0"
 #endif
 
 #include "TimerInterrupt_Generic_Debug.h"
@@ -374,6 +375,9 @@ class SAMDTimerInterrupt
 
       TC3->COUNT16.CTRLA.bit.ENABLE = 1;
       TC3_wait_for_sync();
+      
+      TISR_LOGDEBUG3(F("SAMD51 TC3 period ="), period, F(", _prescaler ="), _prescaler);
+      TISR_LOGDEBUG1(F("_compareValue ="), _compareValue);
     }
 }; // class SAMDTimerInterrupt
 
@@ -398,8 +402,10 @@ typedef void (*timerCallback)  ();
 timerCallback TC3_callback;
 timerCallback TCC_callback;
 
+
 #define SAMD_TC3        ((TcCount16*) _SAMDTimer)
 #define SAMD_TCC        ((Tcc*) _SAMDTimer)
+
 
 ////////////////////////////////////////////////////////
 
@@ -481,6 +487,8 @@ class SAMDTimerInterrupt
     {
       _period = (unsigned long) (1000000.0f / frequency);
       
+      TISR_LOGDEBUG3(F("_period ="), _period, F(", frequency ="), frequency);
+      
       if (_timerNumber == TIMER_TC3)
       {    
         REG_GCLK_CLKCTRL = (uint16_t) (GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID (GCM_TCC2_TC3));
@@ -488,7 +496,7 @@ class SAMDTimerInterrupt
         while ( GCLK->STATUS.bit.SYNCBUSY == 1 );
         
         TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU/1000000, F(", TIMER_HZ ="), TIMER_HZ/1000000);
-        TISR_LOGWARN3(F("TC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TC3 = 0x"), String((uint32_t) TC3, HEX));
+        TISR_LOGWARN3(F("TC3_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TC3 = 0x"), String((uint32_t) TC3, HEX));
        
         SAMD_TC3->CTRLA.reg &= ~TC_CTRLA_ENABLE;
 
@@ -524,7 +532,7 @@ class SAMDTimerInterrupt
 	      while ( GCLK->STATUS.bit.SYNCBUSY == 1 );
 	      
 	      TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU/1000000, F(", TIMER_HZ ="), TIMER_HZ/1000000);
-        TISR_LOGWARN3(F("TC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TCC0 = 0x"), String((uint32_t) TCC0, HEX));
+        TISR_LOGWARN3(F("TCC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TCC0 = 0x"), String((uint32_t) TCC0, HEX));
        
         SAMD_TCC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;   // Disable TC
         
@@ -544,7 +552,7 @@ class SAMDTimerInterrupt
 
         NVIC_EnableIRQ(TCC0_IRQn);
 
-        SAMD_TCC->CTRLA.reg |= TCC_CTRLA_ENABLE ;
+        SAMD_TCC->CTRLA.reg |= TCC_CTRLA_ENABLE;
         
         while (SAMD_TCC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
 
@@ -652,6 +660,25 @@ class SAMDTimerInterrupt
     {
       TcCount16* _Timer = (TcCount16*) _SAMDTimer;
       
+      //uint32_t TC_CTRLA_PRESCALER_DIVN;
+
+      _Timer->CTRLA.reg &= ~TC_CTRLA_ENABLE;
+      while (_Timer->STATUS.bit.SYNCBUSY == 1);
+      _Timer->CTRLA.reg &= ~TC_CTRLA_PRESCALER_DIV1024;
+      while (_Timer->STATUS.bit.SYNCBUSY == 1);
+      _Timer->CTRLA.reg &= ~TC_CTRLA_PRESCALER_DIV256;
+      while (_Timer->STATUS.bit.SYNCBUSY == 1);
+      _Timer->CTRLA.reg &= ~TC_CTRLA_PRESCALER_DIV64;
+      while (_Timer->STATUS.bit.SYNCBUSY == 1);
+      _Timer->CTRLA.reg &= ~TC_CTRLA_PRESCALER_DIV16;
+      while (_Timer->STATUS.bit.SYNCBUSY == 1);
+      _Timer->CTRLA.reg &= ~TC_CTRLA_PRESCALER_DIV4;
+      while (_Timer->STATUS.bit.SYNCBUSY == 1);
+      _Timer->CTRLA.reg &= ~TC_CTRLA_PRESCALER_DIV2;
+      while (_Timer->STATUS.bit.SYNCBUSY == 1);
+      _Timer->CTRLA.reg &= ~TC_CTRLA_PRESCALER_DIV1;
+      while (_Timer->STATUS.bit.SYNCBUSY == 1);
+      
 	    if (period > 300000) 
 	    {
 		    // Set prescaler to 1024
@@ -712,11 +739,31 @@ class SAMDTimerInterrupt
       _Timer->CC[0].reg = _compareValue;
       
       while (_Timer->STATUS.bit.SYNCBUSY == 1);
+      
+      TISR_LOGDEBUG3(F("SAMD21 TC3 period ="), period, F(", _prescaler ="), _prescaler);
+      TISR_LOGDEBUG1(F("_compareValue ="), _compareValue);
     }
     
     void setPeriod_TIMER_TCC(unsigned long period)
     {
       Tcc* _Timer = (Tcc*) _SAMDTimer;
+      
+      _Timer->CTRLA.reg &= ~TCC_CTRLA_ENABLE;
+      while (_Timer->SYNCBUSY.bit.ENABLE == 1);
+      _Timer->CTRLA.reg &= ~TCC_CTRLA_PRESCALER_DIV1024;
+      while (_Timer->SYNCBUSY.bit.ENABLE == 1);
+      _Timer->CTRLA.reg &= ~TCC_CTRLA_PRESCALER_DIV256;
+      while (_Timer->SYNCBUSY.bit.ENABLE == 1);
+      _Timer->CTRLA.reg &= ~TCC_CTRLA_PRESCALER_DIV64;
+      while (_Timer->SYNCBUSY.bit.ENABLE == 1);
+      _Timer->CTRLA.reg &= ~TCC_CTRLA_PRESCALER_DIV16;
+      while (_Timer->SYNCBUSY.bit.ENABLE == 1);
+      _Timer->CTRLA.reg &= ~TCC_CTRLA_PRESCALER_DIV4;
+      while (_Timer->SYNCBUSY.bit.ENABLE == 1);
+      _Timer->CTRLA.reg &= ~TCC_CTRLA_PRESCALER_DIV2;
+      while (_Timer->SYNCBUSY.bit.ENABLE == 1);
+      _Timer->CTRLA.reg &= ~TCC_CTRLA_PRESCALER_DIV1;
+      while (_Timer->SYNCBUSY.bit.ENABLE == 1);
       
 	    if (period > 300000) 
 	    {
@@ -766,7 +813,7 @@ class SAMDTimerInterrupt
 		    _Timer->CTRLA.reg |= TCC_CTRLA_PRESCALER_DIV1;
 		    _prescaler = 1;
 	    }
-
+	    
 	    _compareValue = (int)(TIMER_HZ / (_prescaler / ((float)period / 1000000))) - 1;
 
 	    _Timer->PER.reg = _compareValue; 
@@ -781,6 +828,9 @@ class SAMDTimerInterrupt
 	    //_Timer->CC[0].reg = _compareValue;
 	    
       while (_Timer->SYNCBUSY.bit.CC0 == 1);
+      
+      TISR_LOGDEBUG3(F("SAMD21 TCC period ="), period, F(", _prescaler ="), _prescaler);
+      TISR_LOGDEBUG1(F("_compareValue ="), _compareValue);
     } 
 }; // class SAMDTimerInterrupt
 

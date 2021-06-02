@@ -64,6 +64,7 @@
   * [ 10. TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
   * [ 11. **Change_Interval**](examples/Change_Interval)
   * [ 12. **ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex)
+  * [ 13. **RepeatedAttachInterrupt_uS**](examples/RepeatedAttachInterrupt_uS) **New**
 * [Example ISR_Timer_Complex_WiFiNINA](#example-isr_timer_complex_wifinina)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. ISR_Timer_Complex_WiFiNINA on Arduino SAMD21 SAMD_NANO_33_IOT using WiFiNINA](#1-isr_timer_complex_wifinina-on-arduino-samd21-samd_nano_33_iot-using-wifinina)
@@ -71,6 +72,7 @@
   * [3. Argument_None on Arduino SAMD21 SAMD_NANO_33_IOT](#3-argument_none-on-arduino-samd21-samd_nano_33_iot)
   * [4. ISR_16_Timers_Array on Arduino SAMD21 SAMD_NANO_33_IOT](#4-isr_16_timers_array-on-arduino-samd21-samd_nano_33_iot)
   * [5. Change_Interval on Arduino SAMD21 SAMD_NANO_33_IOT](#5-change_interval-on-arduino-samd21-samd_nano_33_iot)
+  * [5. RepeatedAttachInterrupt_uS on SAMD21 SEEED_XIAO_M0](#5-repeatedattachinterrupt_us-on-samd21-seeed_xiao_m0)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -148,6 +150,11 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 
 ## Changelog
 
+### Releases v1.4.0
+
+1. Fix SAMD21 rare bug caused by not fully init Prescaler. Check [**Bug when going from a >20000us period to a <20000us period. The timer period become 4 times greater.** #3](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/3)
+
+
 ### Releases v1.3.1
 
 1. Fix compile error to some SAMD21-based boards, such as ADAFRUIT_FEATHER_M0, ARDUINO_SAMD_FEATHER_M0, ADAFRUIT_METRO_M0_EXPRESS, ARDUINO_SAMD_HALLOWING_M0 and ADAFRUIT_BLM_BADGE. Check [Doesn't compile with Adafruit Feather M0 #2](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/2).
@@ -184,20 +191,20 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 
 ## Prerequisites
 
- 1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 1. [`Arduino IDE 1.8.15+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 3. [`Adafruit SAMD core 1.6.7+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 3. [`Adafruit SAMD core 1.7.2+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  4. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  5. [`Sparkfun SAMD core 1.8.1+`](https://github.com/sparkfun/Arduino_Boards) for SAMD21/SAMD51 boards (SparkFun_RedBoard_Turbo, SparkFun_SAMD51_Thing_Plus, etc.).
- 6. [`Blynk library 0.6.1`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with certain example. Don't use Blynk beta versions.
- 7. To use with certain example, depending on which Ethernet card you're using:
+ 6. [`Blynk library 0.6.1`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with some examples. Don't use Blynk beta versions.
+ 7. To use with some examples, depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://github.com/arduino-libraries/Ethernet) for W5100, W5200 and W5500.  [![GitHub release](https://img.shields.io/github/release/arduino-libraries/Ethernet.svg)](https://github.com/arduino-libraries/Ethernet/releases/latest)
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500. [![GitHub release](https://img.shields.io/github/release/adafruit/Ethernet2.svg)](https://github.com/adafruit/Ethernet2/releases/latest)
    - [`Ethernet3 library v1.5.5+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip. [![GitHub release](https://img.shields.io/github/release/sstaub/Ethernet3.svg)](https://github.com/sstaub/Ethernet3/releases/latest)
    - [`EthernetENC library v2.0.1+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
-   - [`UIPEthernet library v2.0.9+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
- 7. To use with certain example
+   - [`UIPEthernet library v2.0.10+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
+ 7. To use with some examples
    - [`SimpleTimer library`](https://github.com/jfturcot/SimpleTimer) for [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) and [ISR_16_Timers_Array_Complex](examples/ISR_16_Timers_Array_Complex) examples. New to avoid error with `old` Sparkfun core.
 ---
 ---
@@ -271,11 +278,11 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
 
 #### 2. For Adafruit SAMD boards
  
- ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.4) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.4). 
+ ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.7.2) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.2). 
 
-Supposing the Adafruit SAMD core version is 1.6.4. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.7.2. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.6.4/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.2/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -519,7 +526,7 @@ void setup()
 ### Examples: 
 
  1. [Argument_None](examples/Argument_None)
- 2. [**Argument_None_uS**](examples/Argument_None_uS). New
+ 2. [**Argument_None_uS**](examples/Argument_None_uS).
  3. [ISR_16_Timers_Array](examples/ISR_16_Timers_Array)
  4. [ISR_RPM_Measure](examples/ISR_RPM_Measure)
  5. [ISR_Timer_Complex_Ethernet](examples/ISR_Timer_Complex_Ethernet)
@@ -529,7 +536,8 @@ void setup()
  9. [TimerInterruptTest](examples/TimerInterruptTest)
 10. [TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
 11. [**Change_Interval**](examples/Change_Interval). New
-12. [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex). New
+12. [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex).
+13. [**RepeatedAttachInterrupt_uS**](examples/RepeatedAttachInterrupt_uS). **New**
  
 
 ---
@@ -820,7 +828,7 @@ While software timer, **programmed for 2s, is activated after 7.937s !!!**. Then
 
 ```
 Starting ISR_Timer_Complex_WiFiNINA on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.3.1
+SAMDTimerInterrupt v1.4.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -885,7 +893,7 @@ The following is the sample terminal output when running example [**TimerInterru
 
 ```
 Starting TimerInterruptTest on ITSYBITSY_M4
-SAMDTimerInterrupt v1.3.1
+SAMDTimerInterrupt v1.4.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 120 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 0x4101c000 , TC3 = 0x 0x4101c000
@@ -963,7 +971,7 @@ The following is the sample terminal output when running example [**Argument_Non
 
 ```
 Starting Argument_None on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.3.1
+SAMDTimerInterrupt v1.4.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -1013,7 +1021,7 @@ In this example, 16 independent ISR Timers are used, yet utilized just one Hardw
 
 ```
 Starting ISR_16_Timers_Array on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.3.1
+SAMDTimerInterrupt v1.4.0
 CPU Frequency = 48 MHz
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
@@ -1138,7 +1146,7 @@ The following is the sample terminal output when running example [Change_Interva
 
 ```
 Starting Change_Interval on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.3.1
+SAMDTimerInterrupt v1.4.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -1194,6 +1202,72 @@ Time = 200020, TimerCount = 297
 ```
 
 ---
+
+### 6. RepeatedAttachInterrupt_uS on SAMD21 SEEED_XIAO_M0
+
+The following is the sample terminal output when running example [RepeatedAttachInterrupt_uS](examples/RepeatedAttachInterrupt_uS) on **SEEED_XIAO_M0** to demonstrate how to change Timer Interval on-the-fly
+
+
+```
+Starting RepeatedAttachInterrupt_uS on SEEED_XIAO_M0
+SAMDTimerInterrupt v1.4.0
+CPU Frequency = 48 MHz
+[TISR] _period = 19995 , frequency = 50.01
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002000 , TCC0 = 0x 42002000
+[TISR] SAMD21 TCC period = 19995 , _prescaler = 16
+[TISR] _compareValue = 59984
+myClockTimer (19995) = 19993           <========== OK===============================<=======OK
+[TISR] _period = 19995 , frequency = 50.01
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002000 , TCC0 = 0x 42002000
+[TISR] SAMD21 TCC period = 19995 , _prescaler = 16
+[TISR] _compareValue = 59984
+myClockTimer (19995) = 19993           <========== OK===============================<=======OK
+[TISR] _period = 19995 , frequency = 50.01
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002000 , TCC0 = 0x 42002000
+[TISR] SAMD21 TCC period = 19995 , _prescaler = 16
+[TISR] _compareValue = 59984
+myClockTimer (19995) = 19993           <========== OK===============================<=======OK
+[TISR] _period = 19000 , frequency = 52.63
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002000 , TCC0 = 0x 42002000
+[TISR] SAMD21 TCC period = 19000 , _prescaler = 16
+[TISR] _compareValue = 56999
+myClockTimer (19000) = 18998
+[TISR] _period = 20005 , frequency = 49.99
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002000 , TCC0 = 0x 42002000
+[TISR] SAMD21 TCC period = 20005 , _prescaler = 64
+[TISR] _compareValue = 15002
+myClockTimer (20005) = 20002
+[TISR] _period = 30000 , frequency = 33.33
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002000 , TCC0 = 0x 42002000
+[TISR] SAMD21 TCC period = 30000 , _prescaler = 64
+[TISR] _compareValue = 22498
+myClockTimer (30000) = 29996
+[TISR] _period = 19995 , frequency = 50.01
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002000 , TCC0 = 0x 42002000
+[TISR] SAMD21 TCC period = 19995 , _prescaler = 16
+[TISR] _compareValue = 59984
+myClockTimer (19995) = 19993           <========== OK===============================<=======OK
+[TISR] _period = 30000 , frequency = 33.33
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002000 , TCC0 = 0x 42002000
+[TISR] SAMD21 TCC period = 30000 , _prescaler = 64
+[TISR] _compareValue = 22498
+myClockTimer (30000) = 29997
+[TISR] _period = 19995 , frequency = 50.01
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002000 , TCC0 = 0x 42002000
+[TISR] SAMD21 TCC period = 19995 , _prescaler = 16
+[TISR] _compareValue = 59984
+```
+
+---
 ---
 
 ### Debug
@@ -1222,6 +1296,10 @@ Sometimes, the library will only work if you update the board core to the latest
 ---
 
 ## Releases
+
+### Releases v1.4.0
+
+1. Fix SAMD21 rare bug caused by not fully init Prescaler. Check [**Bug when going from a >20000us period to a <20000us period. The timer period become 4 times greater.** #3](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/3)
 
 ### Releases v1.3.1
 
@@ -1297,12 +1375,14 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 1. Use some code from the [**Tamasa's ZeroTimer Library**](https://github.com/EHbtj/ZeroTimer).
 2. Use some code from the [**Dennis van Gils' SAMD51_InterruptTimer Library**](https://github.com/Dennis-van-Gils/SAMD51_InterruptTimer).
 3. Thanks to [generationmake](https://github.com/generationmake) to report the issue [Doesn't compile with Adafruit Feather M0 #2](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/2) leading to new release v1.3.1.
+4. Thanks to [thiagothimotti](https://github.com/) to report the **interesting hard-to-find bug** in [Bug when going from a >20000us period to a <20000us period. The timer period become 4 times greater. #3](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/3) leading to new release v1.4.0.
 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/EHbtj"><img src="https://github.com/EHbtj.png" width="100px;" alt="EHbtj"/><br /><sub><b>⭐️ Tamasa</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/Dennis-van-Gils"><img src="https://github.com/Dennis-van-Gils.png" width="100px;" alt="Dennis-van-Gils"/><br /><sub><b> Dennis van Gils</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/generationmake"><img src="https://github.com/generationmake.png" width="100px;" alt="generationmake"/><br /><sub><b>generationmake</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/thiagothimotti"><img src="https://github.com/thiagothimotti.png" width="100px;" alt="thiagothimotti"/><br /><sub><b>thiagothimotti</b></sub></a><br /></td>
   </tr> 
 </table>
 
