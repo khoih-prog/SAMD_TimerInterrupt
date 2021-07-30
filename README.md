@@ -500,10 +500,12 @@ void doingSomething101s()
 
 void setup()
 {
+  uint32_t lastMillis = 0;
+
   ....
   
   // Interval in microsecs
-  if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_MS * 1000, TimerHandler))
+  if (ITimer0.attachInterruptInterval(HW_TIMER_INTERVAL_MS * 1000, TimerHandler))
   {
     lastMillis = millis();
     Serial.println("Starting  ITimer OK, millis() = " + String(lastMillis));
