@@ -2,24 +2,21 @@
   SAMDTimerInterrupt.h
   For SAMD boards
   Written by Khoi Hoang
-
   Built by Khoi Hoang https://github.com/khoih-prog/SAMD_TimerInterrupt
   Licensed under MIT license
-
   Now even you use all these new 16 ISR-based timers,with their maximum interval practically unlimited (limited only by
   unsigned long miliseconds), you just consume only one SAMD timer and avoid conflicting with other cores' tasks.
   The accuracy is nearly perfect compared to software timers. The most important feature is they're ISR-based timers
   Therefore, their executions are not blocked by bad-behaving functions / tasks.
   This important feature is absolutely necessary for mission-critical tasks.
-
+  
   Based on SimpleTimer - A timer library for Arduino.
   Author: mromani@ottotecnica.com
   Copyright (c) 2010 OTTOTECNICA Italy
-
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
-
-  Version: 1.4.0
+  
+  Version: 1.5.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +27,7 @@
   1.3.0   K.Hoang      02/04/2021 Add support to Sparkfun SAMD21 and SAMD51 boards
   1.3.1   K.Hoang      09/05/2021 Fix compile error to some SAMD21-based boards
   1.4.0   K.Hoang      02/06/2021 Fix SAMD21 rare bug caused by not fully init Prescaler
+  1.5.0   K.Hoang      08/10/2021 Improve frequency precision by using float instead of ulong
 *****************************************************************************************************************************/
 /*
   SAMD21
@@ -37,14 +35,12 @@
   The Timer/Counter for Control Applications (TCC) module provides a set of timing and counting related functionality, such as the
   generation of periodic waveforms, the capturing of a periodic waveform's frequency/duty cycle, software timekeeping for periodic
   operations, waveform extension control, fault detection etc.
-
   The counter size of the TCC modules can be 16- or 24-bit depending on the TCC instance
   
   1) Nano-33-IoT SAMD21G18A
   .arduino15/packages/arduino/tools/CMSIS-Atmel/1.2.0/CMSIS/Device/ATMEL/samd21/include/samd21g18a.h
    #define TC3  ((Tc *)0x42002C00UL)
   
-
 */
 #pragma once
 
@@ -106,7 +102,7 @@
 #include "Arduino.h"
 
 #ifndef SAMD_TIMER_INTERRUPT_VERSION
-  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.4.0"
+  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.5.0"
 #endif
 
 #include "TimerInterrupt_Generic_Debug.h"
@@ -157,10 +153,10 @@ class SAMDTimerInterrupt
     // point to timer struct, (TcCount16*) TC3 for SAMD51
     void*           _SAMDTimer = NULL;
     
-    timerCallback  _callback;        // pointer to the callback function
+    timerCallback   _callback;        // pointer to the callback function
     float           _frequency;       // Timer frequency
     
-    float   _period;
+    float           _period;
     int             _prescaler;
     int             _compareValue;
 
@@ -302,7 +298,7 @@ class SAMDTimerInterrupt
     
     void setPeriod_TIMER_TC3(float period)
     {
-      uint32_t TC_CTRLA_PRESCALER_DIVN;
+      uint32_t TC_CTRLA_PRESCALER_DIVN = 1;
 
       TC3->COUNT16.CTRLA.reg &= ~TC_CTRLA_ENABLE;
       TC3_wait_for_sync();
@@ -451,7 +447,7 @@ class SAMDTimerInterrupt
     // point to timer struct, (TcCount16*) TC3 or (Tcc*) TCC0 for SAMD21
     void*           _SAMDTimer = NULL;
     
-    timerCallback  _callback;        // pointer to the callback function
+    timerCallback   _callback;        // pointer to the callback function
     float           _frequency;       // Timer frequency
     //uint32_t        _timerCount;      // count to activate timer
     
@@ -660,8 +656,6 @@ class SAMDTimerInterrupt
     {
       TcCount16* _Timer = (TcCount16*) _SAMDTimer;
       
-      //uint32_t TC_CTRLA_PRESCALER_DIVN;
-
       _Timer->CTRLA.reg &= ~TC_CTRLA_ENABLE;
       while (_Timer->STATUS.bit.SYNCBUSY == 1);
       _Timer->CTRLA.reg &= ~TC_CTRLA_PRESCALER_DIV1024;
@@ -814,7 +808,7 @@ class SAMDTimerInterrupt
 		    _prescaler = 1;
 	    }
 	    
-	    _compareValue = (int)(TIMER_HZ / (_prescaler / (period / 1000000.0))) - 1;
+	    _compareValue = (int)(TIMER_HZ / (_prescaler / (period / 1000000))) - 1;
 
 	    _Timer->PER.reg = _compareValue; 
 	    

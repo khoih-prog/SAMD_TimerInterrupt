@@ -2,7 +2,7 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/SAMD_TimerInterrupt.svg?)](https://www.ardu-badge.com/SAMD_TimerInterrupt)
 [![GitHub release](https://img.shields.io/github/release/khoih-prog/SAMD_TimerInterrupt.svg)](https://github.com/khoih-prog/SAMD_TimerInterrupt/releases)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/SAMD_TimerInterrupt/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/SAMD_TimerInterrupt/blob/main/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/SAMD_TimerInterrupt.svg)](http://github.com/khoih-prog/SAMD_TimerInterrupt/issues)
 
@@ -16,14 +16,7 @@
   * [Why using ISR-based Hardware Timer Interrupt is better](#why-using-isr-based-hardware-timer-interrupt-is-better)
   * [Currently supported Boards](#currently-supported-boards)
   * [Important Notes about ISR](#important-notes-about-isr)
-* [Changelog](#changelog)
-  * [Releases v1.4.0](#releases-v140)
-  * [Releases v1.3.1](#releases-v131)
-  * [Releases v1.3.0](#releases-v130)
-  * [Releases v1.2.0](#releases-v120)
-  * [Releases v1.1.1](#releases-v111)
-  * [Releases v1.0.1](#releases-v101)
-  * [Releases v1.0.0](#releases-v100)
+* [Changelog](changelog.md)
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
   * [Use Arduino Library Manager](#use-arduino-library-manager)
@@ -76,7 +69,6 @@
   * [6. RepeatedAttachInterrupt_uS on SAMD21 SEEED_XIAO_M0](#6-repeatedattachinterrupt_us-on-samd21-seeed_xiao_m0)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
-* [Releases](#releases)
 * [Issues](#issues)
 * [TO DO](#to-do)
 * [DONE](#done)
@@ -149,53 +141,13 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 ---
 ---
 
-## Changelog
-
-### Releases v1.4.0
-
-1. Fix SAMD21 rare bug caused by not fully init Prescaler. Check [**Bug when going from a >20000us period to a <20000us period. The timer period become 4 times greater.** #3](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/3)
-
-
-### Releases v1.3.1
-
-1. Fix compile error to some SAMD21-based boards, such as ADAFRUIT_FEATHER_M0, ARDUINO_SAMD_FEATHER_M0, ADAFRUIT_METRO_M0_EXPRESS, ARDUINO_SAMD_HALLOWING_M0 and ADAFRUIT_BLM_BADGE. Check [Doesn't compile with Adafruit Feather M0 #2](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/2).
-
-
-### Releases v1.3.0
-
-1. Add support to **Sparkfun SAMD21 boards** such as **SparkFun_RedBoard_Turbo, SparkFun_Qwiic_Micro, etc.**
-2. Add support to **Sparkfun SAMD51 boards** such as **SparkFun_SAMD51_Thing_Plus, SparkFun_SAMD51_MicroMod, etc.**
-3. Update examples to support Sparkfun boards.
-
-### Releases v1.2.0
-
-1. Add better debug feature.
-2. Optimize code and examples to reduce RAM usage
-3. Add Table of Contents
-
-### Releases v1.1.1
-
-1. Add example [**Change_Interval**](examples/Change_Interval) and [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex)
-2. Bump up version to sync with other TimerInterrupt Libraries. Modify Version String.
-
-### Releases v1.0.1
-
-1. Add complicated example [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) utilizing and demonstrating the full usage of 16 independent ISR Timers.
-
-### Releases v1.0.0
-
-1. Permit up to 16 super-long-time, super-accurate ISR-based timers to avoid being blocked
-2. Using cpp code besides Impl.h code to use if Multiple-Definition linker error.
-
----
----
 
 ## Prerequisites
 
- 1. [`Arduino IDE 1.8.15+` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 1. [`Arduino IDE 1.8.16+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 3. [`Adafruit SAMD core 1.7.2+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
- 4. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
+ 3. [`Adafruit SAMD core 1.7.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 4. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  5. [`Sparkfun SAMD core 1.8.1+`](https://github.com/sparkfun/Arduino_Boards) for SAMD21/SAMD51 boards (SparkFun_RedBoard_Turbo, SparkFun_SAMD51_Thing_Plus, etc.).
  6. [`Blynk library 0.6.1`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with some examples. Don't use Blynk beta versions.
  7. To use with some examples, depending on which Ethernet card you're using:
@@ -240,7 +192,7 @@ Another way to install is to:
 
 #### 1. For Arduino SAMD boards
  
- ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.11](Packages_Patches/arduino/hardware/samd/1.8.11) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.11).
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD Packages_Patches](Packages_Patches/arduino/hardware/samd/1.8.11) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.11).
  
 #### For core version v1.8.10+
 
@@ -279,29 +231,39 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
 
 #### 2. For Adafruit SAMD boards
  
- ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.7.2) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.2). 
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.5) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.5). 
 
-Supposing the Adafruit SAMD core version is 1.7.2. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.7.5. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.2/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.5/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.5/cores/arduino/Print.h`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.5/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/cores/arduino/Print.h`
+- `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/cores/arduino/Print.cpp`
 
 #### 3. For Seeeduino SAMD boards
  
- ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.8.1) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1). 
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the whole [Seeeduino SAMD Packages_Patches](Packages_Patches/Seeeduino/hardware/samd/1.8.2) directory into Seeeduino samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2). 
 
-Supposing the Seeeduino SAMD core version is 1.8.1. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.8.2. This file must be copied into the directory:
 
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/cores/arduino/Arduino.h`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/cores/arduino/Print.h`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/cores/arduino/Arduino.h`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/cores/arduino/Print.h`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/cores/arduino/Print.cpp`
 
 ---
 ---
@@ -829,7 +791,7 @@ While software timer, **programmed for 2s, is activated after 7.937s !!!**. Then
 
 ```
 Starting ISR_Timer_Complex_WiFiNINA on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.4.0
+SAMDTimerInterrupt v1.5.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -894,7 +856,7 @@ The following is the sample terminal output when running example [**TimerInterru
 
 ```
 Starting TimerInterruptTest on ITSYBITSY_M4
-SAMDTimerInterrupt v1.4.0
+SAMDTimerInterrupt v1.5.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 120 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 0x4101c000 , TC3 = 0x 0x4101c000
@@ -972,7 +934,7 @@ The following is the sample terminal output when running example [**Argument_Non
 
 ```
 Starting Argument_None on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.4.0
+SAMDTimerInterrupt v1.5.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -1022,7 +984,7 @@ In this example, 16 independent ISR Timers are used, yet utilized just one Hardw
 
 ```
 Starting ISR_16_Timers_Array on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.4.0
+SAMDTimerInterrupt v1.5.0
 CPU Frequency = 48 MHz
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
@@ -1147,7 +1109,7 @@ The following is the sample terminal output when running example [Change_Interva
 
 ```
 Starting Change_Interval on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.4.0
+SAMDTimerInterrupt v1.5.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -1211,7 +1173,7 @@ The following is the sample terminal output when running example [RepeatedAttach
 
 ```
 Starting RepeatedAttachInterrupt_uS on SEEED_XIAO_M0
-SAMDTimerInterrupt v1.4.0
+SAMDTimerInterrupt v1.5.0
 CPU Frequency = 48 MHz
 [TISR] _period = 19995 , frequency = 50.01
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
@@ -1376,7 +1338,9 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 1. Use some code from the [**Tamasa's ZeroTimer Library**](https://github.com/EHbtj/ZeroTimer).
 2. Use some code from the [**Dennis van Gils' SAMD51_InterruptTimer Library**](https://github.com/Dennis-van-Gils/SAMD51_InterruptTimer).
 3. Thanks to [generationmake](https://github.com/generationmake) to report the issue [Doesn't compile with Adafruit Feather M0 #2](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/2) leading to new release v1.3.1.
-4. Thanks to [thiagothimotti](https://github.com/) to report the **interesting hard-to-find bug** in [Bug when going from a >20000us period to a <20000us period. The timer period become 4 times greater. #3](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/3) leading to new release v1.4.0.
+4. Thanks to [thiagothimotti](https://github.com/thiagothimotti) to report the **interesting hard-to-find bug** in [Bug when going from a >20000us period to a <20000us period. The timer period become 4 times greater. #3](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/3) leading to new release v1.4.0.
+5. Thanks to [generationmake](https://github.com/generationmake) to make a PR in [change variable period from unsigned long to float #7](https://github.com/khoih-prog/SAMD_TimerInterrupt/pull/7) leading to new release v1.5.0.
+
 
 <table>
   <tr>
@@ -1384,6 +1348,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
     <td align="center"><a href="https://github.com/Dennis-van-Gils"><img src="https://github.com/Dennis-van-Gils.png" width="100px;" alt="Dennis-van-Gils"/><br /><sub><b> Dennis van Gils</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/generationmake"><img src="https://github.com/generationmake.png" width="100px;" alt="generationmake"/><br /><sub><b>generationmake</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/thiagothimotti"><img src="https://github.com/thiagothimotti.png" width="100px;" alt="thiagothimotti"/><br /><sub><b>thiagothimotti</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/generationmake"><img src="https://github.com/generationmake.png" width="100px;" alt="generationmake"/><br /><sub><b>generationmake</b></sub></a><br /></td>
   </tr> 
 </table>
 
@@ -1402,7 +1367,7 @@ If you want to contribute to this project:
 
 ### License
 
-- The library is licensed under [MIT](https://github.com/khoih-prog/SAMD_TimerInterrupt/blob/master/LICENSE)
+- The library is licensed under [MIT](https://github.com/khoih-prog/SAMD_TimerInterrupt/blob/main/LICENSE)
 
 ---
 

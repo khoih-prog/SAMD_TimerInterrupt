@@ -19,7 +19,7 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
 
-  Version: 1.4.0
+  Version: 1.5.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.3.0   K.Hoang      02/04/2021 Add support to Sparkfun SAMD21 and SAMD51 boards
   1.3.1   K.Hoang      09/05/2021 Fix compile error to some SAMD21-based boards
   1.4.0   K.Hoang      02/06/2021 Fix SAMD21 rare bug caused by not fully init Prescaler
+  1.5.0   K.Hoang      08/10/2021 Improve frequency precision by using float instead of ulong
 *****************************************************************************************************************************/
 
 #pragma once
@@ -46,7 +47,7 @@
 #endif
 
 #ifndef SAMD_TIMER_INTERRUPT_VERSION
-  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.4.0"
+  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.5.0"
 #endif
 
 #include "TimerInterrupt_Generic_Debug.h"
