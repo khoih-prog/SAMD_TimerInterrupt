@@ -1396,6 +1396,8 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
     <td align="center"><a href="https://github.com/thiagothimotti"><img src="https://github.com/thiagothimotti.png" width="100px;" alt="thiagothimotti"/><br /><sub><b>thiagothimotti</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/generationmake"><img src="https://github.com/generationmake.png" width="100px;" alt="generationmake"/><br /><sub><b>generationmake</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/homeodor"><img src="https://github.com/homeodor.png" width="100px;" alt="homeodor"/><br /><sub><b>Alexander Golovanov</b></sub></a><br /></td>
+  </tr>
+  <tr>  
     <td align="center"><a href="https://github.com/will63powell"><img src="https://github.com/will63powell.png" width="100px;" alt="will63powell"/><br /><sub><b>Will Powell</b></sub></a><br /></td>
   </tr> 
 </table>
