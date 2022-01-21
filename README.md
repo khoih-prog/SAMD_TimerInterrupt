@@ -11,6 +11,7 @@
 
 ## Table of Contents
 
+* [Important Change from v1.6.0](#Important-Change-from-v160)
 * [Why do we need this SAMD_TimerInterrupt library](#why-do-we-need-this-samd_timerinterrupt-library)
   * [Features](#features)
   * [Why using ISR-based Hardware Timer Interrupt is better](#why-using-isr-based-hardware-timer-interrupt-is-better)
@@ -58,8 +59,9 @@
   * [ 10. TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
   * [ 11. **Change_Interval**](examples/Change_Interval)
   * [ 12. **ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex)
-  * [ 13. **RepeatedAttachInterrupt_uS**](examples/RepeatedAttachInterrupt_uS) **New**
-* [Example ISR_Timer_Complex_WiFiNINA](#example-isr_timer_complex_wifinina)
+  * [ 13. **RepeatedAttachInterrupt_uS**](examples/RepeatedAttachInterrupt_uS)
+  * [ 14. **multiFileProject**](examples/multiFileProject) **New**
+* [Example ISR_16_Timers_Array_Complex](#example-ISR_16_Timers_Array_Complex)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. ISR_Timer_Complex_WiFiNINA on Arduino SAMD21 SAMD_NANO_33_IOT using WiFiNINA](#1-isr_timer_complex_wifinina-on-arduino-samd21-samd_nano_33_iot-using-wifinina)
   * [2. TimerInterruptTest on Adafruit SAMD51 ITSYBITSY_M4](#2-timerinterrupttest-on-adafruit-samd51-itsybitsy_m4)
@@ -80,6 +82,10 @@
 
 ---
 ---
+
+### Important Change from v1.6.0
+
+Please have a look at [HOWTO Fix `Multiple Definitions` Linker Error](#howto-fix-multiple-definitions-linker-error)
 
 ### Why do we need this [SAMD_TimerInterrupt library](https://github.com/khoih-prog/SAMD_TimerInterrupt)
 
@@ -144,21 +150,23 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 
 ## Prerequisites
 
- 1. [`Arduino IDE 1.8.16+` for Arduino](https://www.arduino.cc/en/Main/Software)
- 2. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 3. [`Adafruit SAMD core 1.7.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
+ 2. [`Arduino SAMD core 1.8.12+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
+ 3. [`Adafruit SAMD core 1.7.7+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  4. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  5. [`Sparkfun SAMD core 1.8.1+`](https://github.com/sparkfun/Arduino_Boards) for SAMD21/SAMD51 boards (SparkFun_RedBoard_Turbo, SparkFun_SAMD51_Thing_Plus, etc.).
- 6. [`Blynk library 0.6.1`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with some examples. Don't use Blynk beta versions.
+ 6. [`Blynk library 1.0.1`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with some examples. Don't use Blynk beta versions.
  7. To use with some examples, depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://github.com/arduino-libraries/Ethernet) for W5100, W5200 and W5500.  [![GitHub release](https://img.shields.io/github/release/arduino-libraries/Ethernet.svg)](https://github.com/arduino-libraries/Ethernet/releases/latest)
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500. [![GitHub release](https://img.shields.io/github/release/adafruit/Ethernet2.svg)](https://github.com/adafruit/Ethernet2/releases/latest)
    - [`Ethernet3 library v1.5.5+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip. [![GitHub release](https://img.shields.io/github/release/sstaub/Ethernet3.svg)](https://github.com/sstaub/Ethernet3/releases/latest)
-   - [`EthernetENC library v2.0.1+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
-   - [`UIPEthernet library v2.0.10+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
+   - [`EthernetENC library v2.0.2+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
+   - [`UIPEthernet library v2.0.11+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
  7. To use with some examples
    - [`SimpleTimer library`](https://github.com/jfturcot/SimpleTimer) for [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) and [ISR_16_Timers_Array_Complex](examples/ISR_16_Timers_Array_Complex) examples. New to avoid error with `old` Sparkfun core.
+   
+   
 ---
 ---
 
@@ -192,13 +200,13 @@ Another way to install is to:
 
 #### 1. For Arduino SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD Packages_Patches](Packages_Patches/arduino/hardware/samd/1.8.11) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.11).
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD Packages_Patches](Packages_Patches/arduino/hardware/samd/1.8.12) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.12).
  
 #### For core version v1.8.10+
 
-Supposing the Arduino SAMD version is 1.8.11. Now only one file must be copied into the directory:
+Supposing the Arduino SAMD version is 1.8.12. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/samd/1.8.11/platform.txt`
+- `~/.arduino15/packages/arduino/hardware/samd/1.8.12/platform.txt`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -231,13 +239,13 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
 
 #### 2. For Adafruit SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.5) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.5). 
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.6) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.6). 
 
-Supposing the Adafruit SAMD core version is 1.7.5. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.7.6. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.5/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.5/cores/arduino/Print.h`
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.5/cores/arduino/Print.cpp`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.6/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.6/cores/arduino/Print.h`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.6/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -332,24 +340,28 @@ To fix [`ESP32 compile error`](https://github.com/espressif/arduino-esp32), just
 
 ### HOWTO Fix `Multiple Definitions` Linker Error
 
-The current library implementation, using **xyz-Impl.h instead of standard xyz.cpp**, possibly creates certain `Multiple Definitions` Linker error in certain use cases. Although it's simple to just modify several lines of code, either in the library or in the application, the library is adding 2 more source directories
+The current library implementation, using `xyz-Impl.h` instead of standard `xyz.cpp`, possibly creates certain `Multiple Definitions` Linker error in certain use cases.
 
-1. **scr_h** for new h-only files
-2. **src_cpp** for standard h/cpp files
+You can include `.hpp`
 
-besides the standard **src** directory.
+```
+// Can be included as many times as necessary, without `Multiple Definitions` Linker Error
+#include "SAMDTimerInterrupt.hpp"     //https://github.com/khoih-prog/SAMD_TimerInterrupt
 
-To use the **old standard cpp** way, locate this library' directory, then just 
+// Can be included as many times as necessary, without `Multiple Definitions` Linker Error
+#include "SAMD_ISR_Timer.hpp"         //https://github.com/khoih-prog/SAMD_TimerInterrupt
+```
 
-1. **Delete the all the files in src directory.**
-2. **Copy all the files in src_cpp directory into src.**
-3. Close then reopen the application code in Arduino IDE, etc. to recompile from scratch.
+in many files. But be sure to use the following `.h` files **in just 1 `.h`, `.cpp` or `.ino` file**, which must **not be included in any other file**, to avoid `Multiple Definitions` Linker Error
 
-To re-use the **new h-only** way, just 
+```
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include "SAMDTimerInterrupt.h"       //https://github.com/khoih-prog/SAMD_TimerInterrupt
 
-1. **Delete the all the files in src directory.**
-2. **Copy the files in src_h directory into src.**
-3. Close then reopen the application code in Arduino IDE, etc. to recompile from scratch.
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include "SAMD_ISR_Timer.h"           //https://github.com/khoih-prog/SAMD_TimerInterrupt
+```
+
 
 ---
 ---
@@ -500,57 +512,26 @@ void setup()
 10. [TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
 11. [**Change_Interval**](examples/Change_Interval). New
 12. [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex).
-13. [**RepeatedAttachInterrupt_uS**](examples/RepeatedAttachInterrupt_uS). **New**
+13. [**RepeatedAttachInterrupt_uS**](examples/RepeatedAttachInterrupt_uS).
+14. [**multiFileProject**](examples/multiFileProject). **New**
  
 
 ---
 ---
 
-### Example [ISR_Timer_Complex_WiFiNINA](examples/ISR_Timer_Complex_WiFiNINA)
+### Example [ISR_16_Timers_Array_Complex](examples/ISR_16_Timers_Array_Complex)
 
 ```
 #if !( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
-    || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
-    || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-    || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
-    || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
+      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) \
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD51__) || defined(__SAMD51J20A__) \
+      || defined(__SAMD51J19A__) || defined(__SAMD51G19A__) || defined(__SAMD51P19A__)  \
+      || defined(__SAMD21E15A__) || defined(__SAMD21E16A__) || defined(__SAMD21E17A__) || defined(__SAMD21E18A__) \
+      || defined(__SAMD21G15A__) || defined(__SAMD21G16A__) || defined(__SAMD21G17A__) || defined(__SAMD21G18A__) \
+      || defined(__SAMD21J15A__) || defined(__SAMD21J16A__) || defined(__SAMD21J17A__) || defined(__SAMD21J18A__) )
   #error This code is designed to run on SAMD21/SAMD51 platform! Please check your Tools->Board setting.
 #endif
-
-#define BLYNK_PRINT Serial
-
-//#define BLYNK_DEBUG
-#ifdef BLYNK_DEBUG
-  #undef BLYNK_DEBUG
-#endif
-
-/* Comment this out to disable prints and save space */
-#define BLYNK_PRINT Serial
-
-#include <BlynkSimpleWiFiNINA_SAMD.h>
-
-#define USE_LOCAL_SERVER      true
-
-#if USE_LOCAL_SERVER
-  char auth[] = "******";
-  char server[] = "account.duckdns.org";
-  //char server[] = "192.168.2.112";
-
-#else
-  char auth[] = "******";
-  char server[] = "blynk-cloud.com";
-#endif
-  
-  #define BLYNK_HARDWARE_PORT       8080
-
-#if !(USE_BUILTIN_ETHERNET || USE_UIP_ETHERNET)
-  #define W5100_CS  10
-  #define SDCARD_CS 4
-#endif
-
-// Your WiFi credentials.
-char ssid[] = "SSID";
-char pass[] = "12345678";
 
 // These define's must be placed at the beginning before #include "SAMDTimerInterrupt.h"
 // _TIMERINTERRUPT_LOGLEVEL_ from 0 to 4
@@ -559,13 +540,31 @@ char pass[] = "12345678";
 #define TIMER_INTERRUPT_DEBUG         0
 #define _TIMERINTERRUPT_LOGLEVEL_     0
 
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "SAMDTimerInterrupt.h"
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "SAMD_ISR_Timer.h"
 
-#define TIMER_INTERVAL_MS         100
-#define HW_TIMER_INTERVAL_MS      50
+#include <SimpleTimer.h>              // https://github.com/jfturcot/SimpleTimer
 
-volatile uint32_t lastMillis = 0;
+#ifndef LED_BUILTIN
+#define LED_BUILTIN       13
+#endif
+
+#ifndef LED_BLUE
+#define LED_BLUE          2
+#endif
+
+#ifndef LED_RED
+#define LED_RED           3
+#endif
+
+#define HW_TIMER_INTERVAL_US      10000L
+
+volatile uint32_t startMillis = 0;
+
+// You can select SAMD Hardware Timer  from SAMD_TIMER_1 or SAMD_TIMER_3
 
 // Depending on the board, you can select SAMD21 Hardware Timer from TC3-TCC
 // SAMD21 Hardware Timer from TC3 or TCC
@@ -583,34 +582,19 @@ SAMDTimer ITimer(TIMER_TC3);
 // Each SAMD_ISR_Timer can service 16 different ISR-based timers
 SAMD_ISR_Timer ISR_Timer;
 
-// Init Blynk Timer
-BlynkTimer blynkTimer;
-
-#define LED_TOGGLE_INTERVAL_MS        5000L
-
-#define TIMER_INTERVAL_2S             2000L
-#define TIMER_INTERVAL_5S             5000L
-#define TIMER_INTERVAL_11S            11000L
-#define TIMER_INTERVAL_101S           101000L
+#define LED_TOGGLE_INTERVAL_MS        2000L
 
 void TimerHandler()
 {
   static bool toggle  = false;
-  static bool started = false;
   static int timeRun  = 0;
 
   ISR_Timer.run();
 
-  // Toggle LED every LED_TOGGLE_INTERVAL_MS = 5000ms = 5s
-  if (++timeRun == (LED_TOGGLE_INTERVAL_MS / HW_TIMER_INTERVAL_MS) )
+  // Toggle LED every LED_TOGGLE_INTERVAL_MS = 2000ms = 2s
+  if (++timeRun == ((LED_TOGGLE_INTERVAL_MS * 1000) / HW_TIMER_INTERVAL_US) )
   {
     timeRun = 0;
-
-    if (!started)
-    {
-      started = true;
-      pinMode(LED_BUILTIN, OUTPUT);
-    }
 
     //timer interrupt toggles pin LED_BUILTIN
     digitalWrite(LED_BUILTIN, toggle);
@@ -618,155 +602,262 @@ void TimerHandler()
   }
 }
 
-// In SAMD, avoid doing something fancy in ISR, for example complex Serial.print with String() argument
+/////////////////////////////////////////////////
+
+#define NUMBER_ISR_TIMERS         16
+
+typedef void (*irqCallback)  ();
+
+/////////////////////////////////////////////////
+
+#define USE_COMPLEX_STRUCT      true
+
+#if USE_COMPLEX_STRUCT
+
+typedef struct
+{
+  irqCallback   irqCallbackFunc;
+  uint32_t      TimerInterval;
+  unsigned long deltaMillis;
+  unsigned long previousMillis;
+} ISRTimerData;
+
+// In NRF52, avoid doing something fancy in ISR, for example Serial.print()
 // The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
 // Or you can get this run-time error / crash
-void doingSomething2s()
+
+void doingSomething(int index);
+
+#else
+
+volatile unsigned long deltaMillis    [NUMBER_ISR_TIMERS] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+volatile unsigned long previousMillis [NUMBER_ISR_TIMERS] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+// You can assign any interval for any timer here, in milliseconds
+uint32_t TimerInterval[NUMBER_ISR_TIMERS] =
 {
-#if (TIMER_INTERRUPT_DEBUG > 0)  
-  static unsigned long previousMillis = lastMillis;
-  unsigned long deltaMillis = millis() - previousMillis;
+  5000L,  10000L,  15000L,  20000L,  25000L,  30000L,  35000L,  40000L,
+  45000L, 50000L,  55000L,  60000L,  65000L,  70000L,  75000L,  80000L
+};
 
+void doingSomething(int index)
+{
+  unsigned long currentMillis  = millis();
 
-  if (previousMillis > TIMER_INTERVAL_2S)
-  {
-    Serial.print("2s: Delta ms = "); Serial.println(deltaMillis);
-  }
-
-  previousMillis = millis();
-#endif
+  deltaMillis[index]    = currentMillis - previousMillis[index];
+  previousMillis[index] = currentMillis;
 }
 
-// In SAMD, avoid doing something fancy in ISR, for example complex Serial.print with String() argument
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-void doingSomething5s()
-{
-#if (TIMER_INTERRUPT_DEBUG > 0)  
-  static unsigned long previousMillis = lastMillis;
-  unsigned long deltaMillis = millis() - previousMillis;
-
-
-  if (previousMillis > TIMER_INTERVAL_5S)
-  {
-    Serial.print("5s: Delta ms = "); Serial.println(deltaMillis);
-  }
-
-  previousMillis = millis();
 #endif
+
+////////////////////////////////////
+// Shared
+////////////////////////////////////
+
+void doingSomething0()
+{
+  doingSomething(0);
 }
 
-// In SAMD, avoid doing something fancy in ISR, for example complex Serial.print with String() argument
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-void doingSomething11s()
+void doingSomething1()
 {
-#if (TIMER_INTERRUPT_DEBUG > 0)  
-  static unsigned long previousMillis = lastMillis;
-  unsigned long deltaMillis = millis() - previousMillis;
-
-
-  if (previousMillis > TIMER_INTERVAL_11S)
-  {
-    Serial.print("11s: Delta ms = "); Serial.println(deltaMillis);
-  }
-
-  previousMillis = millis();
-#endif
+  doingSomething(1);
 }
 
-// In SAMD, avoid doing something fancy in ISR, for example complex Serial.print with String() argument
-// The pure simple Serial.prints here are just for demonstration and testing. Must be eliminate in working environment
-// Or you can get this run-time error / crash
-void doingSomething101s()
+void doingSomething2()
 {
-#if (TIMER_INTERRUPT_DEBUG > 0)  
-  static unsigned long previousMillis = lastMillis;
-  unsigned long deltaMillis = millis() - previousMillis;
-
-
-  if (previousMillis > TIMER_INTERVAL101S)
-  {
-    Serial.print("101s: Delta ms = "); Serial.println(deltaMillis);
-  }
-
-  previousMillis = millis();
-#endif
+  doingSomething(2);
 }
 
-#define BLYNK_TIMER_MS        2000L
+void doingSomething3()
+{
+  doingSomething(3);
+}
+
+void doingSomething4()
+{
+  doingSomething(4);
+}
+
+void doingSomething5()
+{
+  doingSomething(5);
+}
+
+void doingSomething6()
+{
+  doingSomething(6);
+}
+
+void doingSomething7()
+{
+  doingSomething(7);
+}
+
+void doingSomething8()
+{
+  doingSomething(8);
+}
+
+void doingSomething9()
+{
+  doingSomething(9);
+}
+
+void doingSomething10()
+{
+  doingSomething(10);
+}
+
+void doingSomething11()
+{
+  doingSomething(11);
+}
+
+void doingSomething12()
+{
+  doingSomething(12);
+}
+
+void doingSomething13()
+{
+  doingSomething(13);
+}
+
+void doingSomething14()
+{
+  doingSomething(14);
+}
+
+void doingSomething15()
+{
+  doingSomething(15);
+}
+
+#if USE_COMPLEX_STRUCT
+
+ISRTimerData curISRTimerData[NUMBER_ISR_TIMERS] =
+{
+  //irqCallbackFunc, TimerInterval, deltaMillis, previousMillis
+  { doingSomething0,    5000L, 0, 0 },
+  { doingSomething1,   10000L, 0, 0 },
+  { doingSomething2,   15000L, 0, 0 },
+  { doingSomething3,   20000L, 0, 0 },
+  { doingSomething4,   25000L, 0, 0 },
+  { doingSomething5,   30000L, 0, 0 },
+  { doingSomething6,   35000L, 0, 0 },
+  { doingSomething7,   40000L, 0, 0 },
+  { doingSomething8,   45000L, 0, 0 },
+  { doingSomething9,   50000L, 0, 0 },
+  { doingSomething10,  55000L, 0, 0 },
+  { doingSomething11,  60000L, 0, 0 },
+  { doingSomething12,  65000L, 0, 0 },
+  { doingSomething13,  70000L, 0, 0 },
+  { doingSomething14,  75000L, 0, 0 },
+  { doingSomething15,  80000L, 0, 0 }
+};
+
+void doingSomething(int index)
+{
+  unsigned long currentMillis  = millis();
+
+  curISRTimerData[index].deltaMillis    = currentMillis - curISRTimerData[index].previousMillis;
+  curISRTimerData[index].previousMillis = currentMillis;
+}
+
+#else
+
+irqCallback irqCallbackFunc[NUMBER_ISR_TIMERS] =
+{
+  doingSomething0,  doingSomething1,  doingSomething2,  doingSomething3,
+  doingSomething4,  doingSomething5,  doingSomething6,  doingSomething7,
+  doingSomething8,  doingSomething9,  doingSomething10, doingSomething11,
+  doingSomething12, doingSomething13, doingSomething14, doingSomething15
+};
+
+#endif
+///////////////////////////////////////////
+
+#define SIMPLE_TIMER_MS        2000L
+
+// Init SimpleTimer
+SimpleTimer simpleTimer;
 
 // Here is software Timer, you can do somewhat fancy stuffs without many issues.
 // But always avoid
 // 1. Long delay() it just doing nothing and pain-without-gain wasting CPU power.Plan and design your code / strategy ahead
 // 2. Very long "do", "while", "for" loops without predetermined exit time.
-void blynkDoingSomething2s()
+void simpleTimerDoingSomething2s()
 {
-  static unsigned long previousMillis = lastMillis;
-  
-  Serial.print(F("blynkDoingSomething2s: Delta programmed ms = ")); Serial.print(BLYNK_TIMER_MS);
-  Serial.print(F(", actual = ")); Serial.println(millis() - previousMillis);
-  
-  previousMillis = millis();
+  static unsigned long previousMillis = startMillis;
+
+  unsigned long currMillis = millis();
+
+  Serial.print(F("SimpleTimer : ")); Serial.print(SIMPLE_TIMER_MS / 1000);
+  Serial.print(F(", ms : ")); Serial.print(currMillis);
+  Serial.print(F(", Dms : ")); Serial.println(currMillis - previousMillis);
+
+  for (uint16_t i = 0; i < NUMBER_ISR_TIMERS; i++)
+  {
+#if USE_COMPLEX_STRUCT
+    Serial.print(F("Timer : ")); Serial.print(i);
+    Serial.print(F(", programmed : ")); Serial.print(curISRTimerData[i].TimerInterval);
+    Serial.print(F(", actual : ")); Serial.println(curISRTimerData[i].deltaMillis);
+#else
+    Serial.print(F("Timer : ")); Serial.print(i);
+    Serial.print(F(", programmed : ")); Serial.print(TimerInterval[i]);
+    Serial.print(F(", actual : ")); Serial.println(deltaMillis[i]);
+#endif
+  }
+
+  previousMillis = currMillis;
 }
 
 void setup()
 {
+  pinMode(LED_BUILTIN, OUTPUT);
+
   Serial.begin(115200);
   while (!Serial);
 
   delay(100);
 
-  Serial.print(F("\nStarting ISR_Timer_Complex_WiFiNINA on ")); Serial.println(BOARD_NAME);
+  Serial.print(F("\nStarting ISR_16_Timers_Array_Complex on ")); Serial.println(BOARD_NAME);
   Serial.println(SAMD_TIMER_INTERRUPT_VERSION);
   Serial.print(F("CPU Frequency = ")); Serial.print(F_CPU / 1000000); Serial.println(F(" MHz"));
 
-  // You need this timer for non-critical tasks. Avoid abusing ISR if not absolutely necessary.
-  blynkTimer.setInterval(BLYNK_TIMER_MS, blynkDoingSomething2s);
-
   // Interval in microsecs
-  if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_MS * 1000, TimerHandler))
+  if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_US, TimerHandler))
   {
-    lastMillis = millis();
-    Serial.print(F("Starting ITimer OK, millis() = ")); Serial.println(lastMillis);
+    startMillis = millis();
+    Serial.print(F("Starting ITimer OK, millis() = ")); Serial.println(startMillis);
   }
   else
-    Serial.println(F("Can't set ITimer. Select another freq. or interval"));
+    Serial.println(F("Can't set ITimer. Select another freq. or timer"));
+
+  startMillis = millis();
 
   // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
   // You can use up to 16 timer for each ISR_Timer
-  ISR_Timer.setInterval(TIMER_INTERVAL_2S, doingSomething2s);
-  ISR_Timer.setInterval(TIMER_INTERVAL_5S, doingSomething5s);
-  ISR_Timer.setInterval(TIMER_INTERVAL_11S, doingSomething11s);
-  ISR_Timer.setInterval(TIMER_INTERVAL_101S, doingSomething101s);
-
-#if !(USE_BUILTIN_ETHERNET || USE_UIP_ETHERNET)
-  pinMode(SDCARD_CS, OUTPUT);
-  digitalWrite(SDCARD_CS, HIGH); // Deselect the SD card
-#endif
-
-#if USE_LOCAL_SERVER
-  //Blynk.begin(auth, server, BLYNK_HARDWARE_PORT);
-  Serial.println(F("Start Blynk"));
-  Blynk.begin(auth, ssid, pass, server, BLYNK_HARDWARE_PORT);
-#else
-  Blynk.begin(auth);
-  // You can also specify server:
-  //Blynk.begin(auth, server, BLYNK_HARDWARE_PORT);
-#endif
-
-  if (Blynk.connected())
+  for (uint16_t i = 0; i < NUMBER_ISR_TIMERS; i++)
   {
-    Serial.print(F("IP = ")); Serial.println(WiFi.localIP());
+#if USE_COMPLEX_STRUCT
+    curISRTimerData[i].previousMillis = startMillis;
+    ISR_Timer.setInterval(curISRTimerData[i].TimerInterval, curISRTimerData[i].irqCallbackFunc);
+#else
+    previousMillis[i] = millis();
+    ISR_Timer.setInterval(TimerInterval[i], irqCallbackFunc[i]);
+#endif
   }
+
+  // You need this timer for non-critical tasks. Avoid abusing ISR if not absolutely necessary.
+  simpleTimer.setInterval(SIMPLE_TIMER_MS, simpleTimerDoingSomething2s);
 }
 
-#define BLOCKING_TIME_MS      3000L
+#define BLOCKING_TIME_MS      10000L
 
 void loop()
 {
-  Blynk.run();
-
   // This unadvised blocking task is used to demonstrate the blocking effects onto the execution and accuracy to Software timer
   // You see the time elapse of ISR_Timer still accurate, whereas very unaccurate for Software Timer
   // The time elapse for 2000ms software timer now becomes 3000ms (BLOCKING_TIME_MS)
@@ -775,7 +866,7 @@ void loop()
 
   // You need this Software timer for non-critical tasks. Avoid abusing ISR if not absolutely necessary
   // You don't need to and never call ISR_Timer.run() here in the loop(). It's already handled by ISR timer.
-  blynkTimer.run();
+  simpleTimer.run();
 }
 ```
 ---
@@ -791,7 +882,7 @@ While software timer, **programmed for 2s, is activated after 7.937s !!!**. Then
 
 ```
 Starting ISR_Timer_Complex_WiFiNINA on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.5.0
+SAMDTimerInterrupt v1.6.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -856,7 +947,7 @@ The following is the sample terminal output when running example [**TimerInterru
 
 ```
 Starting TimerInterruptTest on ITSYBITSY_M4
-SAMDTimerInterrupt v1.5.0
+SAMDTimerInterrupt v1.6.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 120 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 0x4101c000 , TC3 = 0x 0x4101c000
@@ -934,7 +1025,7 @@ The following is the sample terminal output when running example [**Argument_Non
 
 ```
 Starting Argument_None on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.5.0
+SAMDTimerInterrupt v1.6.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -984,8 +1075,7 @@ In this example, 16 independent ISR Timers are used, yet utilized just one Hardw
 
 ```
 Starting ISR_16_Timers_Array on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.5.0
-CPU Frequency = 48 MHz
+SAMDTimerInterrupt v1.6.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -1109,7 +1199,7 @@ The following is the sample terminal output when running example [Change_Interva
 
 ```
 Starting Change_Interval on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.5.0
+SAMDTimerInterrupt v1.6.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -1173,7 +1263,7 @@ The following is the sample terminal output when running example [RepeatedAttach
 
 ```
 Starting RepeatedAttachInterrupt_uS on SEEED_XIAO_M0
-SAMDTimerInterrupt v1.5.0
+SAMDTimerInterrupt v1.6.0
 CPU Frequency = 48 MHz
 [TISR] _period = 19995 , frequency = 50.01
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
@@ -1258,54 +1348,6 @@ Sometimes, the library will only work if you update the board core to the latest
 ---
 ---
 
-## Releases
-
-### Releases v1.4.0
-
-1. Fix SAMD21 rare bug caused by not fully init Prescaler. Check [**Bug when going from a >20000us period to a <20000us period. The timer period become 4 times greater.** #3](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/3)
-
-### Releases v1.3.1
-
-1. Fix compile error to some SAMD21-based boards, such as ADAFRUIT_FEATHER_M0, ARDUINO_SAMD_FEATHER_M0, ADAFRUIT_METRO_M0_EXPRESS, ARDUINO_SAMD_HALLOWING_M0 and ADAFRUIT_BLM_BADGE. Check [Doesn't compile with Adafruit Feather M0 #2](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/2).
-
-### Releases v1.3.0
-
-1. Add support to **Sparkfun SAMD21 boards** such as **SparkFun_RedBoard_Turbo, SparkFun_Qwiic_Micro, etc.**
-2. Add support to **Sparkfun SAMD51 boards** such as **SparkFun_SAMD51_Thing_Plus, SparkFun_SAMD51_MicroMod, etc.**
-3. Update examples to support Sparkfun boards.
-
-### Releases v1.2.0
-
-1. Add better debug feature.
-2. Optimize code and examples to reduce RAM usage
-3. Add Table of Contents
-
-### Releases v1.1.1
-
-1. Add example [**Change_Interval**](examples/Change_Interval) and [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex)
-2. Bump up version to sync with other TimerInterrupt Libraries. Modify Version String.
-
-### Releases v1.0.1
-
-1. Add complicated example [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) utilizing and demonstrating the full usage of 16 independent ISR Timers.
-
-### Releases v1.0.0
-
-1. Permit up to 16 super-long-time, super-accurate ISR-based timers to avoid being blocked
-2. Using cpp code besides Impl.h code to use if Multiple-Definition linker error.
-
-#### Supported Boards
-
-  - **Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, etc.)**.
-  - **Adafruit SAM21 (Itsy-Bitsy M0, Metro M0, Feather M0, Gemma M0, etc.)**.
-  - **Adafruit SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
-  - **Seeeduino SAMD21/SAMD51 boards (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)** 
-  - **Sparkfun SAMD21 boards** such as **SparkFun_RedBoard_Turbo, SparkFun_Qwiic_Micro, etc.**
-  - **Sparkfun SAMD51 boards** such as **SparkFun_SAMD51_Thing_Plus, SparkFun_SAMD51_MicroMod, etc.**
-
----
----
-
 ### Issues
 
 Submit issues to: [SAMD_TimerInterrupt issues](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues)
@@ -1326,7 +1368,9 @@ Submit issues to: [SAMD_TimerInterrupt issues](https://github.com/khoih-prog/SAM
 3. Longer time interval
 4. Similar features for remaining Arduino boards such as ESP32, ESP8266, STM32, nRF52, mbed-nRF52, Teensy, etc.
 5. Add Table of Contents
-
+6. Fix `multiple-definitions` linker error
+7. Add support to many more boards, such as `SAMD21E1xA`, `SAMD21G1xA` and`SAMD21J1xA`
+8. Optimize library code by using `reference-passing` instead of `value-passing`
 
 ---
 ---
@@ -1340,6 +1384,8 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 3. Thanks to [generationmake](https://github.com/generationmake) to report the issue [Doesn't compile with Adafruit Feather M0 #2](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/2) leading to new release v1.3.1.
 4. Thanks to [thiagothimotti](https://github.com/thiagothimotti) to report the **interesting hard-to-find bug** in [Bug when going from a >20000us period to a <20000us period. The timer period become 4 times greater. #3](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/3) leading to new release v1.4.0.
 5. Thanks to [generationmake](https://github.com/generationmake) to make a PR in [change variable period from unsigned long to float #7](https://github.com/khoih-prog/SAMD_TimerInterrupt/pull/7) leading to new release v1.5.0.
+6. Thanks to [Alexander Golovanov](https://github.com/homeodor) to propose a PR in [Add more SAMD21 #10](https://github.com/khoih-prog/SAMD_TimerInterrupt/pull/10) leading to the support of many new boards in new release v1.6.0
+7. Thanks to [Will Powell](https://github.com/will63powell) to report the bug in [Multiple Definition Error Not fixed by swapping src_cpp or src_h with src #9](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/9) leading to new release v1.6.0.
 
 
 <table>
@@ -1349,6 +1395,8 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
     <td align="center"><a href="https://github.com/generationmake"><img src="https://github.com/generationmake.png" width="100px;" alt="generationmake"/><br /><sub><b>generationmake</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/thiagothimotti"><img src="https://github.com/thiagothimotti.png" width="100px;" alt="thiagothimotti"/><br /><sub><b>thiagothimotti</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/generationmake"><img src="https://github.com/generationmake.png" width="100px;" alt="generationmake"/><br /><sub><b>generationmake</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/homeodor"><img src="https://github.com/homeodor.png" width="100px;" alt="homeodor"/><br /><sub><b>Alexander Golovanov</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/will63powell"><img src="https://github.com/will63powell.png" width="100px;" alt="will63powell"/><br /><sub><b>Will Powell</b></sub></a><br /></td>
   </tr> 
 </table>
 

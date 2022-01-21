@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.6.0](#releases-v160)
   * [Releases v1.5.0](#releases-v150)
   * [Releases v1.4.0](#releases-v140)
   * [Releases v1.3.1](#releases-v131)
@@ -26,6 +27,15 @@
 ---
 
 ## Changelog
+
+### Releases v1.6.0
+
+1. Fix `multiple-definitions` linker error. Drop `src_cpp` and `src_h` directories
+2. Add example [multiFileProject](examples/multiFileProject) to demo for multiple-file project.
+3. Add support to many more boards, such as `SAMD21E1xA`, `SAMD21G1xA` and`SAMD21J1xA`
+4. Optimize library code by using `reference-passing` instead of `value-passing`
+5. Update all examples
+6. Update `Packages_Patches`
 
 ### Releases v1.5.0
 

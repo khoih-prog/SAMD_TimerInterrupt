@@ -12,7 +12,7 @@
   Therefore, their executions are not blocked by bad-behaving functions / tasks.
   This important feature is absolutely necessary for mission-critical tasks.
 
-  Version: 1.5.0
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,6 +24,7 @@
   1.3.1   K.Hoang      09/05/2021 Fix compile error to some SAMD21-based boards
   1.4.0   K.Hoang      02/06/2021 Fix SAMD21 rare bug caused by not fully init Prescaler
   1.5.0   K.Hoang      08/10/2021 Improve frequency precision by using float instead of ulong
+  1.6.0   K.Hoang      20/01/2022 Fix `multiple-definitions` linker error. Add support to many more boards
  *****************************************************************************************************************************/
 
 #pragma once

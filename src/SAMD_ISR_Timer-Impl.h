@@ -19,7 +19,7 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
 
-  Version: 1.5.0
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -31,6 +31,7 @@
   1.3.1   K.Hoang      09/05/2021 Fix compile error to some SAMD21-based boards
   1.4.0   K.Hoang      02/06/2021 Fix SAMD21 rare bug caused by not fully init Prescaler
   1.5.0   K.Hoang      08/10/2021 Improve frequency precision by using float instead of ulong
+  1.6.0   K.Hoang      20/01/2022 Fix `multiple-definitions` linker error. Add support to many more boards
 *****************************************************************************************************************************/
 
 #pragma once
@@ -38,7 +39,6 @@
 #ifndef ISR_TIMER_GENERIC_IMPL_H
 #define ISR_TIMER_GENERIC_IMPL_H
 
-//#include "SAMD_ISR_Timer.h"
 #include <string.h>
 
 SAMD_ISR_Timer::SAMD_ISR_Timer()
@@ -152,7 +152,7 @@ int SAMD_ISR_Timer::findFirstFreeSlot()
 }
 
 
-int SAMD_ISR_Timer::setupTimer(unsigned long d, void* f, void* p, bool h, unsigned n) 
+int SAMD_ISR_Timer::setupTimer(const unsigned long& d, void* f, void* p, bool h, const unsigned& n) 
 {
   int freeTimer;
 
@@ -186,37 +186,37 @@ int SAMD_ISR_Timer::setupTimer(unsigned long d, void* f, void* p, bool h, unsign
 }
 
 
-int SAMD_ISR_Timer::setTimer(unsigned long d, timerCallback f, unsigned n) 
+int SAMD_ISR_Timer::setTimer(const unsigned long& d, timerCallback f, const unsigned& n) 
 {
   return setupTimer(d, (void *)f, NULL, false, n);
 }
 
-int SAMD_ISR_Timer::setTimer(unsigned long d, timerCallback_p f, void* p, unsigned n) 
+int SAMD_ISR_Timer::setTimer(const unsigned long& d, timerCallback_p f, void* p, const unsigned& n) 
 {
   return setupTimer(d, (void *)f, p, true, n);
 }
 
-int SAMD_ISR_Timer::setInterval(unsigned long d, timerCallback f) 
+int SAMD_ISR_Timer::setInterval(const unsigned long& d, timerCallback f) 
 {
   return setupTimer(d, (void *)f, NULL, false, TIMER_RUN_FOREVER);
 }
 
-int SAMD_ISR_Timer::setInterval(unsigned long d, timerCallback_p f, void* p) 
+int SAMD_ISR_Timer::setInterval(const unsigned long& d, timerCallback_p f, void* p) 
 {
   return setupTimer(d, (void *)f, p, true, TIMER_RUN_FOREVER);
 }
 
-int SAMD_ISR_Timer::setTimeout(unsigned long d, timerCallback f) 
+int SAMD_ISR_Timer::setTimeout(const unsigned long& d, timerCallback f) 
 {
   return setupTimer(d, (void *)f, NULL, false, TIMER_RUN_ONCE);
 }
 
-int SAMD_ISR_Timer::setTimeout(unsigned long d, timerCallback_p f, void* p) 
+int SAMD_ISR_Timer::setTimeout(const unsigned long& d, timerCallback_p f, void* p) 
 {
   return setupTimer(d, (void *)f, p, true, TIMER_RUN_ONCE);
 }
 
-bool SAMD_ISR_Timer::changeInterval(unsigned numTimer, unsigned long d) 
+bool SAMD_ISR_Timer::changeInterval(const unsigned& numTimer, const unsigned long& d) 
 {
   if (numTimer >= MAX_NUMBER_TIMERS) 
   {
@@ -236,7 +236,7 @@ bool SAMD_ISR_Timer::changeInterval(unsigned numTimer, unsigned long d)
   return false;
 }
 
-void SAMD_ISR_Timer::deleteTimer(unsigned timerId) 
+void SAMD_ISR_Timer::deleteTimer(const unsigned& timerId) 
 {
   if (timerId >= MAX_NUMBER_TIMERS) 
   {
@@ -261,7 +261,7 @@ void SAMD_ISR_Timer::deleteTimer(unsigned timerId)
 }
 
 // function contributed by code@rowansimms.com
-void SAMD_ISR_Timer::restartTimer(unsigned numTimer) 
+void SAMD_ISR_Timer::restartTimer(const unsigned& numTimer) 
 {
   if (numTimer >= MAX_NUMBER_TIMERS) 
   {
@@ -272,7 +272,7 @@ void SAMD_ISR_Timer::restartTimer(unsigned numTimer)
 }
 
 
-bool SAMD_ISR_Timer::isEnabled(unsigned numTimer) 
+bool SAMD_ISR_Timer::isEnabled(const unsigned& numTimer) 
 {
   if (numTimer >= MAX_NUMBER_TIMERS) 
   {
@@ -283,7 +283,7 @@ bool SAMD_ISR_Timer::isEnabled(unsigned numTimer)
 }
 
 
-void SAMD_ISR_Timer::enable(unsigned numTimer) 
+void SAMD_ISR_Timer::enable(const unsigned& numTimer) 
 {
   if (numTimer >= MAX_NUMBER_TIMERS) 
   {
@@ -294,7 +294,7 @@ void SAMD_ISR_Timer::enable(unsigned numTimer)
 }
 
 
-void SAMD_ISR_Timer::disable(unsigned numTimer) 
+void SAMD_ISR_Timer::disable(const unsigned& numTimer) 
 {
   if (numTimer >= MAX_NUMBER_TIMERS) 
   {
@@ -330,7 +330,7 @@ void SAMD_ISR_Timer::disableAll()
   }
 }
 
-void SAMD_ISR_Timer::toggle(unsigned numTimer) 
+void SAMD_ISR_Timer::toggle(const unsigned& numTimer) 
 {
   if (numTimer >= MAX_NUMBER_TIMERS) 
   {

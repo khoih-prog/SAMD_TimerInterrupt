@@ -19,7 +19,7 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
 
-  Version: 1.5.0
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -31,6 +31,7 @@
   1.3.1   K.Hoang      09/05/2021 Fix compile error to some SAMD21-based boards
   1.4.0   K.Hoang      02/06/2021 Fix SAMD21 rare bug caused by not fully init Prescaler
   1.5.0   K.Hoang      08/10/2021 Improve frequency precision by using float instead of ulong
+  1.6.0   K.Hoang      20/01/2022 Fix `multiple-definitions` linker error. Add support to many more boards
 *****************************************************************************************************************************/
 
 #pragma once
@@ -38,154 +39,7 @@
 #ifndef ISR_TIMER_GENERIC_H
 #define ISR_TIMER_GENERIC_H
 
-#if !( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
-    || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
-    || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-    || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
-    || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
-  #error This code is designed to run on SAMD21/SAMD51 platform! Please check your Tools->Board setting.
-#endif
-
-#ifndef SAMD_TIMER_INTERRUPT_VERSION
-  #define SAMD_TIMER_INTERRUPT_VERSION       "SAMDTimerInterrupt v1.5.0"
-#endif
-
-#include "TimerInterrupt_Generic_Debug.h"
-
-#include <stddef.h>
-
-#include <inttypes.h>
-
-#if defined(ARDUINO)
-  #if ARDUINO >= 100
-    #include <Arduino.h>
-  #else
-    #include <WProgram.h>
-  #endif
-#endif
-
-#define SAMD_ISR_Timer SAMD_ISRTimer
-
-typedef void (*timerCallback)();
-typedef void (*timerCallback_p)(void *);
-
-class SAMD_ISR_Timer 
-{
-
-  public:
-    // maximum number of timers
-#define MAX_NUMBER_TIMERS         16
-#define TIMER_RUN_FOREVER         0
-#define TIMER_RUN_ONCE            1
-
-    // constructor
-    SAMD_ISR_Timer();
-
-    void init();
-
-    // this function must be called inside loop()
-    void run();
-
-    // Timer will call function 'f' every 'd' milliseconds forever
-    // returns the timer number (numTimer) on success or
-    // -1 on failure (f == NULL) or no free timers
-    int setInterval(unsigned long d, timerCallback f);
-
-    // Timer will call function 'f' with parameter 'p' every 'd' milliseconds forever
-    // returns the timer number (numTimer) on success or
-    // -1 on failure (f == NULL) or no free timers
-    int setInterval(unsigned long d, timerCallback_p f, void* p);
-
-    // Timer will call function 'f' after 'd' milliseconds one time
-    // returns the timer number (numTimer) on success or
-    // -1 on failure (f == NULL) or no free timers
-    int setTimeout(unsigned long d, timerCallback f);
-
-    // Timer will call function 'f' with parameter 'p' after 'd' milliseconds one time
-    // returns the timer number (numTimer) on success or
-    // -1 on failure (f == NULL) or no free timers
-    int setTimeout(unsigned long d, timerCallback_p f, void* p);
-
-    // Timer will call function 'f' every 'd' milliseconds 'n' times
-    // returns the timer number (numTimer) on success or
-    // -1 on failure (f == NULL) or no free timers
-    int setTimer(unsigned long d, timerCallback f, unsigned n);
-
-    // Timer will call function 'f' with parameter 'p' every 'd' milliseconds 'n' times
-    // returns the timer number (numTimer) on success or
-    // -1 on failure (f == NULL) or no free timers
-    int setTimer(unsigned long d, timerCallback_p f, void* p, unsigned n);
-
-    // updates interval of the specified timer
-    bool changeInterval(unsigned numTimer, unsigned long d);
-
-    // destroy the specified timer
-    void deleteTimer(unsigned numTimer);
-
-    // restart the specified timer
-    void restartTimer(unsigned numTimer);
-
-    // returns true if the specified timer is enabled
-    bool isEnabled(unsigned numTimer);
-
-    // enables the specified timer
-    void enable(unsigned numTimer);
-
-    // disables the specified timer
-    void disable(unsigned numTimer);
-
-    // enables all timers
-    void enableAll();
-
-    // disables all timers
-    void disableAll();
-
-    // enables the specified timer if it's currently disabled, and vice-versa
-    void toggle(unsigned numTimer);
-
-    // returns the number of used timers
-    unsigned getNumTimers();
-
-    // returns the number of available timers
-    unsigned getNumAvailableTimers() 
-    {
-      return MAX_NUMBER_TIMERS - numTimers;
-    };
-
-  private:
-    // deferred call constants
-#define TIMER_DEFCALL_DONTRUN   0       // don't call the callback function
-#define TIMER_DEFCALL_RUNONLY   1       // call the callback function but don't delete the timer
-#define TIMER_DEFCALL_RUNANDDEL 2       // call the callback function and delete the timer
-
-    // low level function to initialize and enable a new timer
-    // returns the timer number (numTimer) on success or
-    // -1 on failure (f == NULL) or no free timers
-    int setupTimer(unsigned long d, void* f, void* p, bool h, unsigned n);
-
-    // find the first available slot
-    int findFirstFreeSlot();
-
-    typedef struct 
-    {
-      unsigned long prev_millis;        // value returned by the millis() function in the previous run() call
-      void*         callback;           // pointer to the callback function
-      void*         param;              // function parameter
-      bool          hasParam;           // true if callback takes a parameter
-      unsigned long delay;              // delay value
-      unsigned      maxNumRuns;         // number of runs to be executed
-      unsigned      numRuns;            // number of executed runs
-      bool          enabled;            // true if enabled
-      unsigned      toBeCalled;         // deferred function call (sort of) - N.B.: only used in run()
-    } timer_t;
-
-    volatile timer_t timer[MAX_NUMBER_TIMERS];
-
-    // actual number of timers in use (-1 means uninitialized)
-    volatile int numTimers;
-};
-
-
+#include "SAMD_ISR_Timer.hpp"
 #include "SAMD_ISR_Timer-Impl.h"
 
 #endif    // ISR_TIMER_GENERIC_H
