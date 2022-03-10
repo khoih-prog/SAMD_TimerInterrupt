@@ -1387,7 +1387,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 4. Thanks to [thiagothimotti](https://github.com/thiagothimotti) to report the **interesting hard-to-find bug** in [Bug when going from a >20000us period to a <20000us period. The timer period become 4 times greater. #3](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/3) leading to new release v1.4.0.
 5. Thanks to [generationmake](https://github.com/generationmake) to make a PR in [change variable period from unsigned long to float #7](https://github.com/khoih-prog/SAMD_TimerInterrupt/pull/7) leading to new release v1.5.0.
 6. Thanks to [Alexander Golovanov](https://github.com/homeodor) to propose a PR in [Add more SAMD21 #10](https://github.com/khoih-prog/SAMD_TimerInterrupt/pull/10) leading to the support of many new boards in new release v1.6.0
-7. Thanks to [Will Powell](https://github.com/will63powell) to report the bug in [Multiple Definition Error Not fixed by swapping src_cpp or src_h with src #9](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/9) leading to new release v1.6.0.
+7. Thanks to [Will Powell](https://github.com/WillPowellUk) to report the bug in [Multiple Definition Error Not fixed by swapping src_cpp or src_h with src #9](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/9) leading to new release v1.6.0.
 
 
 <table>
@@ -1399,8 +1399,8 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
     <td align="center"><a href="https://github.com/generationmake"><img src="https://github.com/generationmake.png" width="100px;" alt="generationmake"/><br /><sub><b>generationmake</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/homeodor"><img src="https://github.com/homeodor.png" width="100px;" alt="homeodor"/><br /><sub><b>Alexander Golovanov</b></sub></a><br /></td>
   </tr>
-  <tr>  
-    <td align="center"><a href="https://github.com/will63powell"><img src="https://github.com/will63powell.png" width="100px;" alt="will63powell"/><br /><sub><b>Will Powell</b></sub></a><br /></td>
+  <tr>
+    <td align="center"><a href="https://github.com/WillPowellUk"><img src="https://github.com/WillPowellUk.png" width="100px;" alt="WillPowellUk"/><br /><sub><b>Will Powell</b></sub></a><br /></td>
   </tr> 
 </table>
 
