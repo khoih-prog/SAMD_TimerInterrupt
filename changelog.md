@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.7.0](#releases-v170)
   * [Releases v1.6.0](#releases-v160)
   * [Releases v1.5.0](#releases-v150)
   * [Releases v1.4.0](#releases-v140)
@@ -27,6 +28,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.7.0
+
+1. Optimize code for setInterval() of SAMD21 TC3. Check [setInterval on a running timer results in a period significantly longer than the specified period #17](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/17)
+2. Update `Packages_Patches`
 
 ### Releases v1.6.0
 

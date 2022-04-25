@@ -12,7 +12,7 @@
   Therefore, their executions are not blocked by bad-behaving functions / tasks.
   This important feature is absolutely necessary for mission-critical tasks.
 
-  Version: 1.6.0
+  Version: 1.7.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -25,6 +25,7 @@
   1.4.0   K.Hoang      02/06/2021 Fix SAMD21 rare bug caused by not fully init Prescaler
   1.5.0   K.Hoang      08/10/2021 Improve frequency precision by using float instead of ulong
   1.6.0   K.Hoang      20/01/2022 Fix `multiple-definitions` linker error. Add support to many more boards
+  1.7.0   K.Hoang      25/04/2022 Optimize code for setInterval() of SAMD21 TC3
  *****************************************************************************************************************************/
 
 #pragma once
