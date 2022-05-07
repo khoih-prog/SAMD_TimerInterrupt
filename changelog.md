@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.8.0](#releases-v180)
   * [Releases v1.7.0](#releases-v170)
   * [Releases v1.6.0](#releases-v160)
   * [Releases v1.5.0](#releases-v150)
@@ -28,6 +29,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.8.0
+
+1. Fix bug introduced in v1.7.0 to SAMD21 TC3. Check [Do I have a brick? I'm unable to upload sketches after using this library! #21](https://github.com/khoih-prog/SAMD_TimerInterrupt/discussions/21)
 
 ### Releases v1.7.0
 

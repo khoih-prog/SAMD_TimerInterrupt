@@ -16,7 +16,7 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
   
-  Version: 1.7.0
+  Version: 1.8.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.5.0   K.Hoang      08/10/2021 Improve frequency precision by using float instead of ulong
   1.6.0   K.Hoang      20/01/2022 Fix `multiple-definitions` linker error. Add support to many more boards
   1.7.0   K.Hoang      25/04/2022 Optimize code for setInterval() of SAMD21 TC3
+  1.8.0   K.Hoang      07/05/2022 Scrap the buggy code in v1.7.0 for TC3
 *****************************************************************************************************************************/
 /*
   SAMD21
@@ -54,211 +55,189 @@
 
 #if (TIMER_INTERRUPT_USING_SAMD51)
 
-timerCallback TC3_callback;
+  timerCallback TC3_callback;
 
-//#define SAMD_TC3        ((TcCount16*) _SAMDTimer)
+  //#define SAMD_TC3        ((TcCount16*) _SAMDTimer)
 
-////////////////////////////////////////////////////////
-
-void TC3_Handler()
-{
-  // If this interrupt is due to the compare register matching the timer count
-  if (TC3->COUNT16.INTFLAG.bit.MC0 == 1)
+  void TC3_Handler() 
   {
-    TC3->COUNT16.INTFLAG.bit.MC0 = 1;
-    (*TC3_callback)();
+    // If this interrupt is due to the compare register matching the timer count
+    if (TC3->COUNT16.INTFLAG.bit.MC0 == 1) 
+    {
+      TC3->COUNT16.INTFLAG.bit.MC0 = 1;
+      (*TC3_callback)();
+    }
   }
-}
 
-////////////////////////////////////////////////////////
-
-bool SAMDTimerInterrupt::_setPeriod(const float& _period, timerCallback callback)
-{
-  if (_timerNumber == TIMER_TC3)
+  // frequency (in hertz) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
+  // No params and duration now. To be addes in the future by adding similar functions here or to SAMD-hal-timer.c
+  bool SAMDTimerInterrupt::setFrequency(const float& frequency, timerCallback callback)
   {
-    TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU / 1000000, F(", TIMER_HZ ="), TIMER_HZ / 1000000);
-    TISR_LOGWARN3(F("TC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TC3 = 0x"), String((uint32_t) TC3, HEX));
+    _period =  (1000000.0f / frequency);
+    
+    if (_timerNumber == TIMER_TC3)
+    {    
+      TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU/1000000, F(", TIMER_HZ ="), TIMER_HZ/1000000);
+      TISR_LOGWARN3(F("TC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TC3 = 0x"), String((uint32_t) TC3, HEX));
 
-    // Enable the TC bus clock, use clock generator 0
-    GCLK->PCHCTRL[TC3_GCLK_ID].reg = GCLK_PCHCTRL_GEN_GCLK1_Val | (1 << GCLK_PCHCTRL_CHEN_Pos);
-    while (GCLK->SYNCBUSY.reg > 0);
+      // Enable the TC bus clock, use clock generator 0
+      GCLK->PCHCTRL[TC3_GCLK_ID].reg = GCLK_PCHCTRL_GEN_GCLK1_Val | (1 << GCLK_PCHCTRL_CHEN_Pos);
+      
+      while (GCLK->SYNCBUSY.reg > 0);
 
-    TC3->COUNT16.CTRLA.bit.ENABLE = 0;
+      TC3->COUNT16.CTRLA.bit.ENABLE = 0;
+      
+      // Use match mode so that the timer counter resets when the count matches the
+      // compare register
+      TC3->COUNT16.WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ;
+      TC3_wait_for_sync();
+      
+       // Enable the compare interrupt
+      TC3->COUNT16.INTENSET.reg = 0;
+      TC3->COUNT16.INTENSET.bit.MC0 = 1;
 
-    // Use match mode so that the timer counter resets when the count matches the
-    // compare register
-    TC3->COUNT16.WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ;
-    TC3_wait_for_sync();
+      // Enable IRQ
+      NVIC_EnableIRQ(TC3_IRQn);
 
-    // Enable the compare interrupt
-    TC3->COUNT16.INTENSET.reg = 0;
-    TC3->COUNT16.INTENSET.bit.MC0 = 1;
+      //func1 = f;
+      _callback     = callback;
+      TC3_callback  = callback;
 
-    // Enable IRQ
-    NVIC_EnableIRQ(TC3_IRQn);
-
-    //func1 = f;
-    _callback     = callback;
-    TC3_callback  = callback;
-
-    //setPeriod(period);
-    setPeriod_TIMER_TC3(_period);
-
-    return true;
+      //setPeriod(period);
+      setPeriod_TIMER_TC3(_period);
+      
+      return true;
+    }
+    else
+      return false;
   }
-  else
-    return false;
-}
 
-////////////////////////////////////////////////////////
-
-// frequency (in hertz) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
-// No params and duration now. To be addes in the future by adding similar functions here or to SAMD-hal-timer.c
-bool SAMDTimerInterrupt::setFrequency(const float& frequency, timerCallback callback)
-{
-  float _period =  (1000000.0f / frequency);
-  return _setPeriod(_period, callback);
-}
 
 ////////////////////////////////////////////////////////
 
 #elif (TIMER_INTERRUPT_USING_SAMD21)
 
-timerCallback TC3_callback;
-timerCallback TCC_callback;
+  timerCallback TC3_callback;
+  timerCallback TCC_callback;
 
 ////////////////////////////////////////////////////////
 
-void TC3_Handler()
-{
-  // get timer struct
-  TcCount16* TC = (TcCount16*) TC3;
 
-  // If the compare register matching the timer count, trigger this interrupt
-  if (TC->INTFLAG.bit.MC0 == 1)
+  void TC3_Handler()
   {
-    TC->INTFLAG.bit.MC0 = 1;
-    (*TC3_callback)();
-  }
-}
-
-////////////////////////////////////////////////////////
-
-void TCC0_Handler()
-{
-  // get timer struct
-  Tcc* TC = (Tcc*) TCC0;
-
-  // If the compare register matching the timer count, trigger this interrupt
-  if (TC->INTFLAG.bit.MC0 == 1)
-  {
-    // A compare to cc0 caused the interrupt
-    TC->INTFLAG.bit.MC0 = 1;    // writing a one clears the flag ovf flag
-  }
-
-  if (TC->INTFLAG.bit.OVF == 1)
-  {
-    (*TCC_callback)();
-
-    TC->INTFLAG.bit.OVF = 1;
-  }
-}
-
-////////////////////////////////////////////////////////
-
-bool SAMDTimerInterrupt::_setPeriod(const float& _period, timerCallback callback)
-{
-  TISR_LOGDEBUG1(F("_period ="), _period);
-
-  if (_timerNumber == TIMER_TC3)
-  {
-    noInterrupts();
-    
-    if (!initialized)
+    // get timer struct
+	  TcCount16* TC = (TcCount16*) TC3;
+	  
+    // If the compare register matching the timer count, trigger this interrupt
+    if (TC->INTFLAG.bit.MC0 == 1) 
     {
+      TC->INTFLAG.bit.MC0 = 1;
+		  (*TC3_callback)();
+    }
+  }
+
+  void TCC0_Handler()
+  {
+    // get timer struct
+    Tcc* TC = (Tcc*) TCC0;
+    
+    // If the compare register matching the timer count, trigger this interrupt
+    if (TC->INTFLAG.bit.MC0 == 1) 
+    {  
+      // A compare to cc0 caused the interrupt
+	    TC->INTFLAG.bit.MC0 = 1;    // writing a one clears the flag ovf flag
+    }
+
+    if (TC->INTFLAG.bit.OVF == 1) 
+    {
+	    (*TCC_callback)();
+	    
+	    TC->INTFLAG.bit.OVF = 1;
+    }
+  }
+     
+  // frequency (in hertz) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
+  // No params and duration now. To be addes in the future by adding similar functions here or to SAMD-hal-timer.c
+  bool SAMDTimerInterrupt::setFrequency(const float& frequency, timerCallback callback)
+  {
+    _period =  (1000000.0f / frequency);
+    
+    TISR_LOGDEBUG3(F("_period ="), _period, F(", frequency ="), frequency);
+    
+    if (_timerNumber == TIMER_TC3)
+    {    
       REG_GCLK_CLKCTRL = (uint16_t) (GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID (GCM_TCC2_TC3));
-      while ( GCLK->STATUS.bit.SYNCBUSY);
-
-      TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU / 1000000, F(", TIMER_HZ ="), TIMER_HZ / 1000000);
+      
+      while ( GCLK->STATUS.bit.SYNCBUSY == 1 );
+      
+      TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU/1000000, F(", TIMER_HZ ="), TIMER_HZ/1000000);
       TISR_LOGWARN3(F("TC3_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TC3 = 0x"), String((uint32_t) TC3, HEX));
-
+     
       SAMD_TC3->CTRLA.reg &= ~TC_CTRLA_ENABLE;
 
       // Use the 16-bit timer
       SAMD_TC3->CTRLA.reg |= TC_CTRLA_MODE_COUNT16;
-      while (SAMD_TC3->STATUS.bit.SYNCBUSY);
+      
+      while (SAMD_TC3->STATUS.bit.SYNCBUSY == 1);
 
       // Use match mode so that the timer counter resets when the count matches the compare register
       SAMD_TC3->CTRLA.reg |= TC_CTRLA_WAVEGEN_MFRQ;
-      while (SAMD_TC3->STATUS.bit.SYNCBUSY);
+      
+      while (SAMD_TC3->STATUS.bit.SYNCBUSY == 1);
+  
+      setPeriod_TIMER_TC3(_period);
 
       // Enable the compare interrupt
       SAMD_TC3->INTENSET.reg = 0;
       SAMD_TC3->INTENSET.bit.MC0 = 1;
 
-      _callback     = callback;
-      TC3_callback  = callback;
-
       NVIC_EnableIRQ(TC3_IRQn);
 
-      setPeriod_TIMER_TC3(_period); // this also enables the timer
+      SAMD_TC3->CTRLA.reg |= TC_CTRLA_ENABLE;
+      
+      while (SAMD_TC3->STATUS.bit.SYNCBUSY == 1);
 
-      initialized = true;
-    }
-    else
-    {
-      setPeriod_TIMER_TC3(_period);
       _callback     = callback;
       TC3_callback  = callback;
     }
+    else if (_timerNumber == TIMER_TCC)
+    {
+      REG_GCLK_CLKCTRL = (uint16_t) (GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID(GCM_TCC0_TCC1));
     
-    interrupts();
-  }
-  else if (_timerNumber == TIMER_TCC)
-  {
-    REG_GCLK_CLKCTRL = (uint16_t) (GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID(GCM_TCC0_TCC1));
-    while ( GCLK->STATUS.bit.SYNCBUSY == 1 );
+      while ( GCLK->STATUS.bit.SYNCBUSY == 1 );
+      
+      TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU/1000000, F(", TIMER_HZ ="), TIMER_HZ/1000000);
+      TISR_LOGWARN3(F("TCC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TCC0 = 0x"), String((uint32_t) TCC0, HEX));
+     
+      SAMD_TCC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;   // Disable TC
+      
+      while (SAMD_TCC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
+            
+      setPeriod_TIMER_TCC(_period);
 
-    TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU / 1000000, F(", TIMER_HZ ="), TIMER_HZ / 1000000);
-    TISR_LOGWARN3(F("TCC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TCC0 = 0x"), String((uint32_t) TCC0, HEX));
+      // Use match mode so that the timer counter resets when the count matches the compare register
+      SAMD_TCC->WAVE.reg |= TCC_WAVE_WAVEGEN_NFRQ;   // Set wave form configuration 
+      
+      while (SAMD_TCC->SYNCBUSY.bit.WAVE == 1); // wait for sync 
 
-    SAMD_TCC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;   // Disable TC
-    while (SAMD_TCC->SYNCBUSY.bit.ENABLE == 1); // wait for sync
+      // Enable the compare interrupt
+      SAMD_TCC->INTENSET.reg = 0;
+      SAMD_TCC->INTENSET.bit.OVF = 1;
+      SAMD_TCC->INTENSET.bit.MC0 = 1;
 
-    setPeriod_TIMER_TCC(_period);
+      NVIC_EnableIRQ(TCC0_IRQn);
 
-    // Use match mode so that the timer counter resets when the count matches the compare register
-    SAMD_TCC->WAVE.reg |= TCC_WAVE_WAVEGEN_NFRQ;   // Set wave form configuration
-    while (SAMD_TCC->SYNCBUSY.bit.WAVE == 1); // wait for sync
+      SAMD_TCC->CTRLA.reg |= TCC_CTRLA_ENABLE;
+      
+      while (SAMD_TCC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
 
-    // Enable the compare interrupt
-    SAMD_TCC->INTENSET.reg = 0;
-    SAMD_TCC->INTENSET.bit.OVF = 1;
-    SAMD_TCC->INTENSET.bit.MC0 = 1;
-
-    NVIC_EnableIRQ(TCC0_IRQn);
-
-    SAMD_TCC->CTRLA.reg |= TCC_CTRLA_ENABLE;
-    while (SAMD_TCC->SYNCBUSY.bit.ENABLE == 1); // wait for sync
-
-    _callback     = callback;
-    TCC_callback  = callback;
-  }
-
-  return true;
-}
-
-////////////////////////////////////////////////////////
-
-// frequency (in hertz) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
-// No params and duration now. To be addes in the future by adding similar functions here or to SAMD-hal-timer.c
-bool SAMDTimerInterrupt::setFrequency(const float& frequency, timerCallback callback)
-{
-  float _period =  (1000000.0f / frequency);
-  TISR_LOGDEBUG3(F("_period ="), _period, F(", frequency ="), frequency);
+      _callback     = callback;
+      TCC_callback  = callback;
+    }
   
-  return _setPeriod(_period, callback);
-}
+    return true;
+  }
+  
 
 #endif    // #if (TIMER_INTERRUPT_USING_SAMD51)
 

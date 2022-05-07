@@ -147,6 +147,8 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 
 2. Typically global variables are used to pass data between an ISR and the main program. To make sure variables shared between an ISR and the main program are updated correctly, declare them as volatile.
 
+3. The maximum time you can use directly on SAMD TC3/TCC Timer is **~1398.11ms = 1.39811s**. If you use time larger than 1398.11ms, the wrap-around will happen and you'll get much smaller time.
+
 ---
 ---
 
@@ -160,7 +162,7 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
  5. [`Sparkfun SAMD core 1.8.1+`](https://github.com/sparkfun/Arduino_Boards) for SAMD21/SAMD51 boards (SparkFun_RedBoard_Turbo, SparkFun_SAMD51_Thing_Plus, etc.).
  6. [`Blynk library 1.0.1`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with some examples. Don't use Blynk beta versions.
  7. To use with some examples, depending on which Ethernet card you're using:
-   - [`Ethernet_Generic library v2.1.0+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
+   - [`Ethernet_Generic library v2.3.0+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
    - [`EthernetENC library v2.0.2+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.11+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
  7. To use with some examples
@@ -537,7 +539,7 @@ While software timer, **programmed for 2s, is activated after 7.937s !!!**. Then
 
 ```
 Starting ISR_Timer_Complex_WiFiNINA on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.7.0
+SAMDTimerInterrupt v1.8.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -602,7 +604,7 @@ The following is the sample terminal output when running example [**TimerInterru
 
 ```
 Starting TimerInterruptTest on ITSYBITSY_M4
-SAMDTimerInterrupt v1.7.0
+SAMDTimerInterrupt v1.8.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 120 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 0x4101c000 , TC3 = 0x 0x4101c000
@@ -680,7 +682,7 @@ The following is the sample terminal output when running example [**Argument_Non
 
 ```
 Starting Argument_None on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.7.0
+SAMDTimerInterrupt v1.8.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -730,7 +732,7 @@ In this example, 16 independent ISR Timers are used, yet utilized just one Hardw
 
 ```
 Starting ISR_16_Timers_Array on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.7.0
+SAMDTimerInterrupt v1.8.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -854,7 +856,7 @@ The following is the sample terminal output when running example [Change_Interva
 
 ```
 Starting Change_Interval on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.7.0
+SAMDTimerInterrupt v1.8.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -918,7 +920,7 @@ The following is the sample terminal output when running example [RepeatedAttach
 
 ```
 Starting RepeatedAttachInterrupt_uS on SEEED_XIAO_M0
-SAMDTimerInterrupt v1.7.0
+SAMDTimerInterrupt v1.8.0
 CPU Frequency = 48 MHz
 [TISR] _period = 19995 , frequency = 50.01
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
@@ -1018,15 +1020,16 @@ Submit issues to: [SAMD_TimerInterrupt issues](https://github.com/khoih-prog/SAM
 ## DONE
 
 
-1. Basic hardware timers for SAMD21 and SAMD51.
-2. More hardware-initiated software-enabled timers
-3. Longer time interval
-4. Similar features for remaining Arduino boards such as ESP32, ESP8266, STM32, nRF52, mbed-nRF52, Teensy, etc.
-5. Add Table of Contents
-6. Fix `multiple-definitions` linker error
-7. Add support to many more boards, such as `SAMD21E1xA`, `SAMD21G1xA` and`SAMD21J1xA`
-8. Optimize library code by using `reference-passing` instead of `value-passing`
-9. Optimize code for setInterval() of SAMD21 TC3
+ 1. Basic hardware timers for SAMD21 and SAMD51.
+ 2. More hardware-initiated software-enabled timers
+ 3. Longer time interval
+ 4. Similar features for remaining Arduino boards such as ESP32, ESP8266, STM32, nRF52, mbed-nRF52, Teensy, etc.
+ 5. Add Table of Contents
+ 6. Fix `multiple-definitions` linker error
+ 7. Add support to many more boards, such as `SAMD21E1xA`, `SAMD21G1xA` and`SAMD21J1xA`
+ 8. Optimize library code by using `reference-passing` instead of `value-passing`
+ 9. Optimize code for `setInterval()` of SAMD21 TC3
+10. Reverse the change in `setInterval()` of SAMD21 TC3 to fix bug when using SAMD21 TC3.
 
 ---
 ---
@@ -1042,7 +1045,8 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 5. Thanks to [generationmake](https://github.com/generationmake) to make a PR in [change variable period from unsigned long to float #7](https://github.com/khoih-prog/SAMD_TimerInterrupt/pull/7) leading to new release v1.5.0.
 6. Thanks to [Alexander Golovanov](https://github.com/homeodor) to propose a PR in [Add more SAMD21 #10](https://github.com/khoih-prog/SAMD_TimerInterrupt/pull/10) leading to the support of many new boards in new release v1.6.0
 7. Thanks to [Will Powell](https://github.com/WillPowellUk) to report the bug in [Multiple Definition Error Not fixed by swapping src_cpp or src_h with src #9](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/9) leading to new release v1.6.0.
-8. Thanks to [Dave Hooper](https://github.com/stripwax) to report the bug and propose the fix in [setInterval on a running timer results in a period significantly longer than the specified period #17](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/17) leading to new release v1.7.0.
+8. Thanks to [Dave Hooper](https://github.com/stripwax) to report the bug and propose the fix in [setInterval on a running timer results in a period significantly longer than the specified period #17](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/17) leading to new release v1.7.0
+9. Thanks to [Rui Marinheiro](https://github.com/sailorsail) to start the discussion in [Do I have a brick? I'm unable to upload sketches after using this library! #21](https://github.com/khoih-prog/SAMD_TimerInterrupt/discussions/21) leading to new release v1.8.0 to fix the bug
 
 
 <table>
@@ -1057,6 +1061,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
   <tr>
     <td align="center"><a href="https://github.com/WillPowellUk"><img src="https://github.com/WillPowellUk.png" width="100px;" alt="WillPowellUk"/><br /><sub><b>Will Powell</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/stripwax"><img src="https://github.com/stripwax.png" width="100px;" alt="stripwax"/><br /><sub><b>Dave Hooper</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/sailorsail"><img src="https://github.com/sailorsail.png" width="100px;" alt="sailorsail"/><br /><sub><b>Rui Marinheiro</b></sub></a><br /></td>
   </tr> 
 </table>
 

@@ -19,7 +19,7 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
 
-  Version: 1.7.0
+  Version: 1.8.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -33,6 +33,7 @@
   1.5.0   K.Hoang      08/10/2021 Improve frequency precision by using float instead of ulong
   1.6.0   K.Hoang      20/01/2022 Fix `multiple-definitions` linker error. Add support to many more boards
   1.7.0   K.Hoang      25/04/2022 Optimize code for setInterval() of SAMD21 TC3
+  1.8.0   K.Hoang      07/05/2022 Scrap the buggy code in v1.7.0 for TC3
 *****************************************************************************************************************************/
 
 #pragma once
@@ -52,13 +53,13 @@
 #endif
 
 #ifndef SAMD_TIMER_INTERRUPT_VERSION
-  #define SAMD_TIMER_INTERRUPT_VERSION            "SAMDTimerInterrupt v1.7.0"
+  #define SAMD_TIMER_INTERRUPT_VERSION            "SAMDTimerInterrupt v1.8.0"
   
   #define SAMD_TIMER_INTERRUPT_VERSION_MAJOR      1
-  #define SAMD_TIMER_INTERRUPT_VERSION_MINOR      7
+  #define SAMD_TIMER_INTERRUPT_VERSION_MINOR      8
   #define SAMD_TIMER_INTERRUPT_VERSION_PATCH      0
 
-  #define SAMD_TIMER_INTERRUPT_VERSION_INT        1007000
+  #define SAMD_TIMER_INTERRUPT_VERSION_INT        1008000
 #endif
 
 #include "TimerInterrupt_Generic_Debug.h"
