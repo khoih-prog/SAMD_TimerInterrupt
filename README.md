@@ -74,7 +74,6 @@
   * [5. Change_Interval on Arduino SAMD21 SAMD_NANO_33_IOT](#5-Change_Interval-on-Arduino-SAMD21-SAMD_NANO_33_IOT)
   * [6. RepeatedAttachInterrupt_uS on SAMD21 SEEED_XIAO_M0](#6-RepeatedAttachInterrupt_uS-on-SAMD21-SEEED_XIAO_M0)
   * [7. SAMD21_MultiTimers on SAMD21 SAMD_NANO_33_IOT](#7-SAMD21_MultiTimers-on-SAMD21-SAMD_NANO_33_IOT)
-  
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
