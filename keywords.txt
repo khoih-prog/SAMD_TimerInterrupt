@@ -20,8 +20,10 @@ timerCallback_p KEYWORD1
 
 setFrequency	KEYWORD2
 setInterval	KEYWORD2
+setInterval_MS	KEYWORD2
 attachInterrupt	KEYWORD2
 attachInterruptInterval	KEYWORD2
+attachInterruptInterval_MS	KEYWORD2
 detachInterrupt	KEYWORD2
 disableTimer	KEYWORD2
 reattachInterrupt	KEYWORD2

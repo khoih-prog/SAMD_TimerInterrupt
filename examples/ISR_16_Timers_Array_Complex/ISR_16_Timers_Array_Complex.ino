@@ -76,8 +76,7 @@ volatile uint32_t startMillis = 0;
 
 // You can select SAMD Hardware Timer  from SAMD_TIMER_1 or SAMD_TIMER_3
 
-// Depending on the board, you can select SAMD21 Hardware Timer from TC3-TCC
-// SAMD21 Hardware Timer from TC3 or TCC
+// Depending on the board, you can select SAMD21 Hardware Timer from TC3, TC4, TC5, TCC, TCC1 or TCC2
 // SAMD51 Hardware Timer only TC3
 
 // Init SAMD timer TIMER_TC3
@@ -85,7 +84,11 @@ SAMDTimer ITimer(TIMER_TC3);
 
 #if (TIMER_INTERRUPT_USING_SAMD21)
 // Init SAMD timer TIMER_TCC
+//SAMDTimer ITimer(TIMER_TC4);
+//SAMDTimer ITimer(TIMER_TC5);
 //SAMDTimer ITimer(TIMER_TCC);
+//SAMDTimer ITimer(TIMER_TCC1);
+//SAMDTimer ITimer(TIMER_TCC2);
 #endif
 
 // Init SAMD_ISR_Timer
@@ -328,7 +331,7 @@ void setup()
   pinMode(LED_BUILTIN, OUTPUT);
 
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   delay(100);
 

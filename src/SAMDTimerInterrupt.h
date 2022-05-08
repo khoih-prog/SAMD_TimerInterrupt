@@ -16,7 +16,7 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
   
-  Version: 1.8.0
+  Version: 1.9.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -31,6 +31,7 @@
   1.6.0   K.Hoang      20/01/2022 Fix `multiple-definitions` linker error. Add support to many more boards
   1.7.0   K.Hoang      25/04/2022 Optimize code for setInterval() of SAMD21 TC3
   1.8.0   K.Hoang      07/05/2022 Scrap the buggy code in v1.7.0 for TC3
+  1.9.0   K.Hoang      08/05/2022 Add TC4, TC5, TCC1 and TCC2 Timers to SAMD21
 *****************************************************************************************************************************/
 /*
   SAMD21

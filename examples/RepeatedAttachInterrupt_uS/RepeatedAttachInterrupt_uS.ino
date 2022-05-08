@@ -49,11 +49,20 @@
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "SAMDTimerInterrupt.h"
 
-// Depending on the board, you can select SAMD21 Hardware Timer from TC3-TCC
-// SAMD21 Hardware Timer from TC3 or TCC
+// Depending on the board, you can select SAMD21 Hardware Timer from TC3, TC4, TC5, TCC, TCC1 or TCC2
 // SAMD51 Hardware Timer only TC3
+
+// Init SAMD timer TIMER_TC3
 SAMDTimer ITimer(TIMER_TC3);
+
+#if (TIMER_INTERRUPT_USING_SAMD21)
+// Init SAMD timer TIMER_TCC
+//SAMDTimer ITimer(TIMER_TC4);
+//SAMDTimer ITimer(TIMER_TC5);
 //SAMDTimer ITimer(TIMER_TCC);
+//SAMDTimer ITimer(TIMER_TCC1);
+//SAMDTimer ITimer(TIMER_TCC2);
+#endif
 
 volatile uint32_t myClockTimer = 0, lastMicros = 0;
 
@@ -66,7 +75,7 @@ void clock(void)
 void setup()
 {
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   delay(100);
 

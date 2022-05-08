@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.9.0](#releases-v190)
   * [Releases v1.8.0](#releases-v180)
   * [Releases v1.7.0](#releases-v170)
   * [Releases v1.6.0](#releases-v160)
@@ -29,6 +30,13 @@
 ---
 
 ## Changelog
+
+### Releases v1.9.0
+
+1. Add TC4, TC5, TCC1 and TCC2 Timers to SAMD21
+2. Add example [SAMD21_MultiTimers](examples/SAMD21_MultiTimers) to demo the how to use all 6 SAMD21 timers simultaneously.
+3. Add functions `attachInterruptInterval_MS()` and `setInterval_MS()`
+4. Rewrite examples to take advantage of new functions and timers
 
 ### Releases v1.8.0
 

@@ -82,16 +82,19 @@ unsigned int SWPin = 7;
 
 #define LOCAL_DEBUG               1
 
-// Depending on the board, you can select SAMD21 Hardware Timer from TC3-TCC
-// SAMD21 Hardware Timer from TC3 or TCC
+// Depending on the board, you can select SAMD21 Hardware Timer from TC3, TC4, TC5, TCC, TCC1 or TCC2
 // SAMD51 Hardware Timer only TC3
 
 // Init SAMD timer TIMER_TC3
 SAMDTimer ITimer(TIMER_TC3);
 
 #if (TIMER_INTERRUPT_USING_SAMD21)
-  // Init SAMD timer TIMER_TCC
-  //SAMDTimer ITimer(TIMER_TCC);
+// Init SAMD timer TIMER_TCC
+//SAMDTimer ITimer(TIMER_TC4);
+//SAMDTimer ITimer(TIMER_TC5);
+//SAMDTimer ITimer(TIMER_TCC);
+//SAMDTimer ITimer(TIMER_TCC1);
+//SAMDTimer ITimer(TIMER_TCC2);
 #endif
 
 volatile unsigned long rotationTime = 0;
@@ -150,7 +153,7 @@ void TimerHandler()
 void setup()
 {
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   delay(100);
 
@@ -158,8 +161,8 @@ void setup()
   Serial.println(SAMD_TIMER_INTERRUPT_VERSION);
   Serial.print(F("CPU Frequency = ")); Serial.print(F_CPU / 1000000); Serial.println(F(" MHz"));
 
-  // Interval in microsecs
-  if (ITimer.attachInterruptInterval(TIMER0_INTERVAL_MS * 1000, TimerHandler))
+  // Interval in millisecs
+  if (ITimer.attachInterruptInterval_MS(TIMER0_INTERVAL_MS, TimerHandler))
   {
     Serial.print(F("Starting ITimer OK, millis() = ")); Serial.println(millis());
   }
@@ -171,5 +174,4 @@ void setup()
 
 void loop()
 {
-
 }

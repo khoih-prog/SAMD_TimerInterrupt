@@ -62,13 +62,14 @@
 
 volatile uint32_t preMillisTimer0 = 0;
 
-// Depending on the board, you can select SAMD21 Hardware Timer from TC3-TCC
-// SAMD21 Hardware Timer from TC3 or TCC
+// Depending on the board, you can select SAMD21 Hardware Timer from TC3, TC4, TC5, TCC, TCC1 or TCC2
 // SAMD51 Hardware Timer only TC3
 
 // Init SAMD timer TIMER_TC3
 SAMDTimer ITimer0(TIMER_TC3);
-  
+
+//////////////////////////////////////////////
+
 void TimerHandler0()
 {
   static bool toggle0 = false;
@@ -99,6 +100,8 @@ void TimerHandler0()
   toggle0 = !toggle0;
 }
 
+//////////////////////////////////////////////
+
 #if (TIMER_INTERRUPT_USING_SAMD21)
 
 #define TIMER1_INTERVAL_MS        2000
@@ -106,7 +109,13 @@ void TimerHandler0()
 volatile uint32_t preMillisTimer1 = 0;
 
 // Init SAMD timer TIMER_TCC
+//SAMDTimer ITimer1(TIMER_TC4);
+//SAMDTimer ITimer1(TIMER_TC5);
 SAMDTimer ITimer1(TIMER_TCC);
+//SAMDTimer ITimer1(TIMER_TCC1);
+//SAMDTimer ITimer1(TIMER_TCC2);
+
+//////////////////////////////////////////////
 
 void TimerHandler1()
 {
@@ -139,12 +148,14 @@ void TimerHandler1()
 }
 #endif
 
+//////////////////////////////////////////////
+
 void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
   
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   delay(100);
 
@@ -152,8 +163,8 @@ void setup()
   Serial.println(SAMD_TIMER_INTERRUPT_VERSION);
   Serial.print(F("CPU Frequency = ")); Serial.print(F_CPU / 1000000); Serial.println(F(" MHz"));
   
-  // Interval in microsecs
-  if (ITimer0.attachInterruptInterval(TIMER0_INTERVAL_MS * 1000, TimerHandler0))
+  // Interval in millisecs
+  if (ITimer0.attachInterruptInterval_MS(TIMER0_INTERVAL_MS, TimerHandler0))
   {
     preMillisTimer0 = millis();
     Serial.print(F("Starting  ITimer0 OK, millis() = ")); Serial.println(preMillisTimer0);
@@ -162,8 +173,8 @@ void setup()
     Serial.println(F("Can't set ITimer0. Select another freq. or timer"));
 
 #if (TIMER_INTERRUPT_USING_SAMD21)
-  // Interval in microsecs
-  if (ITimer1.attachInterruptInterval(TIMER1_INTERVAL_MS * 1000, TimerHandler1))
+  // Interval in millisecs
+  if (ITimer1.attachInterruptInterval_MS(TIMER1_INTERVAL_MS, TimerHandler1))
   {
     preMillisTimer1 = millis();
     Serial.print(F("Starting ITimer1 OK, millis() = ")); Serial.println(preMillisTimer1);
@@ -173,7 +184,8 @@ void setup()
 #endif
 }
 
+//////////////////////////////////////////////
+
 void loop()
 {
-
 }
