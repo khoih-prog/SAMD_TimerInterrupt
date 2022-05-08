@@ -63,7 +63,8 @@
   * [ 11. **Change_Interval**](examples/Change_Interval)
   * [ 12. **ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex)
   * [ 13. **RepeatedAttachInterrupt_uS**](examples/RepeatedAttachInterrupt_uS)
-  * [ 14. **multiFileProject**](examples/multiFileProject) **New**
+  * [ 14. **multiFileProject**](examples/multiFileProject)
+  * [ 15. **SAMD21_MultiTimers**](examples/SAMD21_MultiTimers) **New**
 * [Example ISR_16_Timers_Array_Complex](#example-ISR_16_Timers_Array_Complex)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. ISR_Timer_Complex_WiFiNINA on Arduino SAMD21 SAMD_NANO_33_IOT using WiFiNINA](#1-isr_timer_complex_wifinina-on-arduino-samd21-samd_nano_33_iot-using-wifinina)
@@ -393,10 +394,20 @@ Before using any Timer, you have to make sure the Timer has not been used by any
 #### 1.1 Init Hardware Timer
 
 ```
-// Depending on the board, you can select SAMD21 Hardware Timer from TC3-TCC
-// SAMD21 Hardware Timer from TC3 or TCC
+// Depending on the board, you can select SAMD21 Hardware Timer from TC3, TC4, TC5, TCC, TCC1 or TCC2
 // SAMD51 Hardware Timer only TC3
-SAMDTimer ITimer0(TIMER_TC3);
+
+// Init SAMD timer TIMER_TC3
+SAMDTimer ITimer(TIMER_TC3);
+
+#if (TIMER_INTERRUPT_USING_SAMD21)
+// Init SAMD timer TIMER_TCC
+//SAMDTimer ITimer(TIMER_TC4);
+//SAMDTimer ITimer(TIMER_TC5);
+//SAMDTimer ITimer(TIMER_TCC);
+//SAMDTimer ITimer(TIMER_TCC1);
+//SAMDTimer ITimer(TIMER_TCC2);
+#endif
 ```
 
 #### 1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function
@@ -413,7 +424,7 @@ void setup()
   ....
   
   // Interval in microsecs
-  if (ITimer0.attachInterruptInterval(TIMER0_INTERVAL_MS * 1000, TimerHandler0))
+  if (ITimer0.attachInterruptInterval_MS(TIMER0_INTERVAL_MS, TimerHandler0))
     Serial.println("Starting  ITimer0 OK, millis() = " + String(millis()));
   else
     Serial.println("Can't set ITimer0. Select another freq. or timer");
@@ -426,10 +437,20 @@ void setup()
 #### 2.1 Init Hardware Timer and ISR-based Timer
 
 ```
-// Depending on the board, you can select SAMD21 Hardware Timer from TC3-TCC
-// SAMD21 Hardware Timer from TC3 or TCC
+// Depending on the board, you can select SAMD21 Hardware Timer from TC3, TC4, TC5, TCC, TCC1 or TCC2
 // SAMD51 Hardware Timer only TC3
-SAMDTimer ITimer0(TIMER_TC3);
+
+// Init SAMD timer TIMER_TC3
+SAMDTimer ITimer(TIMER_TC3);
+
+#if (TIMER_INTERRUPT_USING_SAMD21)
+// Init SAMD timer TIMER_TCC
+//SAMDTimer ITimer(TIMER_TC4);
+//SAMDTimer ITimer(TIMER_TC5);
+//SAMDTimer ITimer(TIMER_TCC);
+//SAMDTimer ITimer(TIMER_TCC1);
+//SAMDTimer ITimer(TIMER_TCC2);
+#endif
 
 // Init SAMD_ISR_Timer
 // Each SAMD_ISR_Timer can service 16 different ISR-based timers
@@ -479,7 +500,7 @@ void setup()
   ....
   
   // Interval in microsecs
-  if (ITimer.attachInterruptInterval(HW_TIMER_INTERVAL_MS * 1000, TimerHandler))
+  if (ITimer.attachInterruptInterval_MS(HW_TIMER_INTERVAL_MS, TimerHandler))
   {
     lastMillis = millis();
     Serial.println("Starting  ITimer OK, millis() = " + String(lastMillis));
@@ -512,10 +533,11 @@ void setup()
  8. [SwitchDebounce](examples/SwitchDebounce)
  9. [TimerInterruptTest](examples/TimerInterruptTest)
 10. [TimerInterruptLEDDemo](examples/TimerInterruptLEDDemo)
-11. [**Change_Interval**](examples/Change_Interval). New
+11. [**Change_Interval**](examples/Change_Interval).
 12. [**ISR_16_Timers_Array_Complex**](examples/ISR_16_Timers_Array_Complex).
 13. [**RepeatedAttachInterrupt_uS**](examples/RepeatedAttachInterrupt_uS).
-14. [**multiFileProject**](examples/multiFileProject). **New**
+14. [**multiFileProject**](examples/multiFileProject).
+15. [**SAMD21_MultiTimers**](examples/SAMD21_MultiTimers). **New**
  
 
 ---
@@ -523,7 +545,7 @@ void setup()
 
 ### Example [ISR_16_Timers_Array_Complex](examples/ISR_16_Timers_Array_Complex)
 
-https://github.com/khoih-prog/SAMD_TimerInterrupt/blob/329513558a9d43b15533a469ceabc30b5896fd80/examples/ISR_16_Timers_Array_Complex/ISR_16_Timers_Array_Complex.ino#L35-L380
+https://github.com/khoih-prog/SAMD_TimerInterrupt/blob/8038b88957b0fb8c0ea818013a696e98c797b832/examples/ISR_16_Timers_Array_Complex/ISR_16_Timers_Array_Complex.ino#L35-L383
 
 
 ---
@@ -539,7 +561,7 @@ While software timer, **programmed for 2s, is activated after 7.937s !!!**. Then
 
 ```
 Starting ISR_Timer_Complex_WiFiNINA on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.8.0
+SAMDTimerInterrupt v1.9.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -604,7 +626,7 @@ The following is the sample terminal output when running example [**TimerInterru
 
 ```
 Starting TimerInterruptTest on ITSYBITSY_M4
-SAMDTimerInterrupt v1.8.0
+SAMDTimerInterrupt v1.9.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 120 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 0x4101c000 , TC3 = 0x 0x4101c000
@@ -682,7 +704,7 @@ The following is the sample terminal output when running example [**Argument_Non
 
 ```
 Starting Argument_None on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.8.0
+SAMDTimerInterrupt v1.9.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -732,7 +754,7 @@ In this example, 16 independent ISR Timers are used, yet utilized just one Hardw
 
 ```
 Starting ISR_16_Timers_Array on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.8.0
+SAMDTimerInterrupt v1.9.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -856,7 +878,7 @@ The following is the sample terminal output when running example [Change_Interva
 
 ```
 Starting Change_Interval on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.8.0
+SAMDTimerInterrupt v1.9.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -920,7 +942,7 @@ The following is the sample terminal output when running example [RepeatedAttach
 
 ```
 Starting RepeatedAttachInterrupt_uS on SEEED_XIAO_M0
-SAMDTimerInterrupt v1.8.0
+SAMDTimerInterrupt v1.9.0
 CPU Frequency = 48 MHz
 [TISR] _period = 19995 , frequency = 50.01
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
@@ -977,6 +999,74 @@ myClockTimer (30000) = 29997
 [TISR] _compareValue = 59984
 ```
 
+
+---
+
+### 7. SAMD21_MultiTimers on SAMD21 SAMD_NANO_33_IOT
+
+The following is the sample terminal output when running example [SAMD21_MultiTimers](examples/SAMD21_MultiTimers) on **SAMD_NANO_33_IOT** to demonstrate demo the how to use all **6 SAMD21 timers simultaneously**.
+
+
+```
+Starting SAMD21_MultiTimers on SAMD_NANO_33_IOT
+SAMDTimerInterrupt v1.9.0
+CPU Frequency = 48 MHz
+[TISR] _period = 20000.00 , frequency = 50.00
+[TISR] _timerNumber = 0
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TC3_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
+[TISR] SAMD21 TC3 period = 20000.00 , _prescaler = 16
+[TISR] _compareValue = 59999
+Starting  TIMER_TC3 OK, millis() = 962
+[TISR] _period = 50000.00 , frequency = 20.00
+[TISR] _timerNumber = 1
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TC4_Timer::startTimer _Timer = 0x 42003000 , TC4 = 0x 42003000
+[TISR] SAMD21 TC4 period = 50000.00 , _prescaler = 64
+[TISR] _compareValue = 37499
+Starting  TIMER_TC4 OK, millis() = 964
+[TISR] _period = 100000.00 , frequency = 10.00
+[TISR] _timerNumber = 2
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TC5_Timer::startTimer _Timer = 0x 42003400 , TC5 = 0x 42003400
+[TISR] SAMD21 TC5 period = 100000.00 , _prescaler = 256
+[TISR] _compareValue = 18749
+Starting  TIMER_TC5 OK, millis() = 966
+[TISR] _period = 200000.00 , frequency = 5.00
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002000 , TCC0 = 0x 42002000
+[TISR] SAMD21 TCC period = 200000.00 , _prescaler = 256
+[TISR] _compareValue = 37499
+Starting  TIMER_TCC OK, millis() = 968
+[TISR] _period = 500000.00 , frequency = 2.00
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002400 , TCC1 = 0x 42002400
+[TISR] SAMD21 TCC1 period = 500000.00 , _prescaler = 1024
+[TISR] _compareValue = 23436
+Starting  TIMER_TCC1 OK, millis() = 970
+[TISR] _period = 1000000.00 , frequency = 1.00
+[TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
+[TISR] TCC_Timer::startTimer _Timer = 0x 42002800 , TCC2 = 0x 42002800
+[TISR] SAMD21 TCC2 period = 1000000.00 , _prescaler = 1024
+[TISR] _compareValue = 46874
+Starting  TIMER_TCC2 OK, millis() = 971
+========================================
+TC3  Actual/Programmed (ms) 20/20
+TC4  Actual/Programmed (ms) 50/50
+TC5  Actual/Programmed (ms) 100/100
+TCC  Actual/Programmed (ms) 200/200
+TCC1 Actual/Programmed (ms) 500/500
+TCC2 Actual/Programmed (ms) 1000/1000
+========================================
+TC3  Actual/Programmed (ms) 20/20
+TC4  Actual/Programmed (ms) 50/50
+TC5  Actual/Programmed (ms) 100/100
+TCC  Actual/Programmed (ms) 200/200
+TCC1 Actual/Programmed (ms) 500/500
+TCC2 Actual/Programmed (ms) 1000/1000
+```
+
+
 ---
 ---
 
@@ -1010,12 +1100,15 @@ Sometimes, the library will only work if you update the board core to the latest
 Submit issues to: [SAMD_TimerInterrupt issues](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues)
 
 ---
+---
 
 ## TO DO
 
 1. Search for bug and improvement.
 2. Similar features for remaining Arduino boards such as SAM-DUE
+3. Add more Timers to SAMD51
 
+---
 
 ## DONE
 
@@ -1030,6 +1123,10 @@ Submit issues to: [SAMD_TimerInterrupt issues](https://github.com/khoih-prog/SAM
  8. Optimize library code by using `reference-passing` instead of `value-passing`
  9. Optimize code for `setInterval()` of SAMD21 TC3
 10. Reverse the change in `setInterval()` of SAMD21 TC3 to fix bug when using SAMD21 TC3.
+11. Add TC4, TC5, TCC1 and TCC2 Timers to SAMD21
+12. Add example [SAMD21_MultiTimers](examples/SAMD21_MultiTimers) to demo the how to use all 6 SAMD21 timers simultaneously.
+13. Add functions `attachInterruptInterval_MS()` and `setInterval_MS()`
+
 
 ---
 ---
@@ -1048,6 +1145,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 8. Thanks to [Dave Hooper](https://github.com/stripwax) to report the bug and propose the fix in [setInterval on a running timer results in a period significantly longer than the specified period #17](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/17) leading to new release v1.7.0
 9. Thanks to [Rui Marinheiro](https://github.com/sailorsail) to start the discussion in [Do I have a brick? I'm unable to upload sketches after using this library! #21](https://github.com/khoih-prog/SAMD_TimerInterrupt/discussions/21) leading to new release v1.8.0 to fix the bug
 
+---
 
 <table>
   <tr>
@@ -1065,6 +1163,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
   </tr> 
 </table>
 
+---
 ---
 
 ### Contributing
