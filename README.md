@@ -601,7 +601,7 @@ void setup()
 
 ### Example [ISR_16_Timers_Array_Complex](examples/ISR_16_Timers_Array_Complex)
 
-https://github.com/khoih-prog/SAMD_TimerInterrupt/blob/8038b88957b0fb8c0ea818013a696e98c797b832/examples/ISR_16_Timers_Array_Complex/ISR_16_Timers_Array_Complex.ino#L35-L383
+https://github.com/khoih-prog/SAMD_TimerInterrupt/blob/89522e1ada1f3267f9860e759e4f88db06e8610f/examples/ISR_16_Timers_Array_Complex/ISR_16_Timers_Array_Complex.ino#L35-L418
 
 
 ---
