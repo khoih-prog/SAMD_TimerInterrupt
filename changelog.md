@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.10.1](#releases-v1101)
   * [Releases v1.10.0](#releases-v1100)
   * [Releases v1.9.0](#releases-v190)
   * [Releases v1.8.0](#releases-v180)
@@ -32,10 +33,15 @@
 
 ## Changelog
 
+### Releases v1.10.1
+
+1. Using float instead of ulong for interval
+2. Prevent overflow of SAMD51 TCx by flagging error
+
 ### Releases v1.10.0
 
 1. Avoid conflict with Servo library. Check [Cannot use TimerInterrupt_Generic Library in the same time than Servo Library #11](https://github.com/khoih-prog/TimerInterrupt_Generic/discussions/11)
-2. Prevent overflow of TCx by flagging error
+2. Prevent overflow of SAMD21 TCx by flagging error
 3. Modify all examples
 4. Update `Packages_Patches`
 

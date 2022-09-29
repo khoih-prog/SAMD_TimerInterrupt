@@ -15,8 +15,8 @@
   Copyright (c) 2010 OTTOTECNICA Italy
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
-  
-  Version: 1.10.0
+
+  Version: 1.10.1
 
   Version  Modified By   Date      Comments
   -------  -----------  ---------- -----------
@@ -33,6 +33,7 @@
   1.8.0    K.Hoang      07/05/2022 Scrap the buggy code in v1.7.0 for TC3
   1.9.0    K.Hoang      08/05/2022 Add TC4, TC5, TCC1 and TCC2 Timers to SAMD21
   1.10.0   K.Hoang      29/09/2022 Avoid conflict with Servo library. Modify all examples. Prevent overflow of TCx
+  1.10.1   K.Hoang      30/09/2022 Using float instead of ulong for interval. Prevent overflow of SAMD51 TCx
 *****************************************************************************************************************************/
 /*
   SAMD21
@@ -155,13 +156,13 @@
 #include "Arduino.h"
 
 #ifndef SAMD_TIMER_INTERRUPT_VERSION
-  #define SAMD_TIMER_INTERRUPT_VERSION            "SAMDTimerInterrupt v1.10.0"
+  #define SAMD_TIMER_INTERRUPT_VERSION            "SAMDTimerInterrupt v1.10.1"
   
   #define SAMD_TIMER_INTERRUPT_VERSION_MAJOR      1
   #define SAMD_TIMER_INTERRUPT_VERSION_MINOR      10
-  #define SAMD_TIMER_INTERRUPT_VERSION_PATCH      0
+  #define SAMD_TIMER_INTERRUPT_VERSION_PATCH      1
 
-  #define SAMD_TIMER_INTERRUPT_VERSION_INT        1010000
+  #define SAMD_TIMER_INTERRUPT_VERSION_INT        1010001
 #endif
 
 #include "TimerInterrupt_Generic_Debug.h"
@@ -245,7 +246,7 @@ class SAMDTimerInterrupt
 
     // interval (in microseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be added in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool setInterval(const unsigned long& interval, timerCallback callback)
+    bool setInterval(const float& interval, timerCallback callback)
     {
       return setFrequency((float) (1000000.0f / interval), callback);
     }
@@ -254,7 +255,7 @@ class SAMDTimerInterrupt
     
     // interval (in milliseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be added in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool setInterval_MS(const unsigned long& interval, timerCallback callback)
+    bool setInterval_MS(const float& interval, timerCallback callback)
     {
       return setFrequency((float) (1000.0f / interval), callback);
     }
@@ -270,7 +271,7 @@ class SAMDTimerInterrupt
 
     // interval (in microseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be added in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool attachInterruptInterval(const unsigned long& interval, timerCallback callback)
+    bool attachInterruptInterval(const float& interval, timerCallback callback)
     {
       return setFrequency( (float) ( 1000000.0f / interval), callback);
     }
@@ -279,7 +280,7 @@ class SAMDTimerInterrupt
     
     // interval (in milliseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be added in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool attachInterruptInterval_MS(const unsigned long& interval, timerCallback callback)
+    bool attachInterruptInterval_MS(const float& interval, timerCallback callback)
     {
       return setFrequency( (float) ( 1000.0f / interval), callback);
     }
@@ -545,7 +546,7 @@ class SAMDTimerInterrupt
 
     // interval (in microseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be added in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool setInterval(const unsigned long& interval, timerCallback callback)
+    bool setInterval(const float& interval, timerCallback callback)
     {
       return setFrequency((float) (1000000.0f / interval), callback);
     }
@@ -554,7 +555,7 @@ class SAMDTimerInterrupt
     
     // interval (in milliseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be added in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool setInterval_MS(const unsigned long& interval, timerCallback callback)
+    bool setInterval_MS(const float& interval, timerCallback callback)
     {
       return setFrequency((float) (1000.0f / interval), callback);
     }
@@ -570,7 +571,7 @@ class SAMDTimerInterrupt
 
     // interval (in microseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be added in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool attachInterruptInterval(const unsigned long& interval, timerCallback callback)
+    bool attachInterruptInterval(const float& interval, timerCallback callback)
     {
       return setFrequency( (float) ( 1000000.0f / interval), callback);
     }
@@ -579,7 +580,7 @@ class SAMDTimerInterrupt
     
     // interval (in milliseconds) and duration (in milliseconds). Duration = 0 or not specified => run indefinitely
     // No params and duration now. To be added in the future by adding similar functions here or to SAMD-hal-timer.c
-    bool attachInterruptInterval_MS(const unsigned long& interval, timerCallback callback)
+    bool attachInterruptInterval_MS(const float& interval, timerCallback callback)
     {
       return setFrequency( (float) ( 1000.0f / interval), callback);
     }

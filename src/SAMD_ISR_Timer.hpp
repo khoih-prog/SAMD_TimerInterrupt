@@ -19,7 +19,7 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
 
-  Version: 1.10.0
+  Version: 1.10.1
 
   Version  Modified By   Date      Comments
   -------  -----------  ---------- -----------
@@ -36,6 +36,7 @@
   1.8.0    K.Hoang      07/05/2022 Scrap the buggy code in v1.7.0 for TC3
   1.9.0    K.Hoang      08/05/2022 Add TC4, TC5, TCC1 and TCC2 Timers to SAMD21
   1.10.0   K.Hoang      29/09/2022 Avoid conflict with Servo library. Modify all examples. Prevent overflow of TCx
+  1.10.1   K.Hoang      30/09/2022 Using float instead of ulong for interval. Prevent overflow of SAMD51 TCx
 *****************************************************************************************************************************/
 
 #pragma once

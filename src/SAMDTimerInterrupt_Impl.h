@@ -15,8 +15,8 @@
   Copyright (c) 2010 OTTOTECNICA Italy
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
-  
-  Version: 1.10.0
+
+  Version: 1.10.1
 
   Version  Modified By   Date      Comments
   -------  -----------  ---------- -----------
@@ -33,6 +33,7 @@
   1.8.0    K.Hoang      07/05/2022 Scrap the buggy code in v1.7.0 for TC3
   1.9.0    K.Hoang      08/05/2022 Add TC4, TC5, TCC1 and TCC2 Timers to SAMD21
   1.10.0   K.Hoang      29/09/2022 Avoid conflict with Servo library. Modify all examples. Prevent overflow of TCx
+  1.10.1   K.Hoang      30/09/2022 Using float instead of ulong for interval. Prevent overflow of SAMD51 TCx
 *****************************************************************************************************************************/
 /*
   SAMD21
@@ -84,6 +85,16 @@
     {    
       TISR_LOGWARN3(F("SAMDTimerInterrupt: F_CPU (MHz) ="), F_CPU/1000000, F(", TIMER_HZ ="), TIMER_HZ/1000000);
       TISR_LOGWARN3(F("TC_Timer::startTimer _Timer = 0x"), String((uint32_t) _SAMDTimer, HEX), F(", TC3 = 0x"), String((uint32_t) TC3, HEX));
+      
+      // maxPermittedPeriod = 1,398,101.33us for 48MHz timer clock
+      float maxPermittedPeriod = (65536.0f * 1024) / (TIMER_HZ / 1000000.0f );
+          
+      if (_period > maxPermittedPeriod )
+      {
+        TISR_LOGERROR3(F("Max permissible _period (us) ="),  maxPermittedPeriod, F(", current _period (us) ="), _period);
+        
+        return false;
+      }
 
       // Enable the TC bus clock, use clock generator 0
       GCLK->PCHCTRL[TC3_GCLK_ID].reg = GCLK_PCHCTRL_GEN_GCLK1_Val | (1 << GCLK_PCHCTRL_CHEN_Pos);
@@ -108,7 +119,7 @@
       TC3_callback  = callback;
 
       setPeriod_TIMER_TC3(_period);
-      
+           
       return true;
     }
     else
@@ -273,12 +284,13 @@
     {    
       TISR_LOGDEBUG1(F("_timerNumber ="), _timerNumber);
       
-      // maxPermittedPeriod = 1,398,101.33us for 48MHz clock
-      float maxPermittedPeriod = (65536.0f * 1024) / (F_CPU / 1000000.0f );
+      // maxPermittedPeriod = 1,398,101.33us for 48MHz timer clock
+      float maxPermittedPeriod = (65536.0f * 1024) / (TIMER_HZ / 1000000.0f );
       
       if (_period > maxPermittedPeriod )
       {
         TISR_LOGERROR3(F("Max permissible _period (us) ="),  maxPermittedPeriod, F(", current _period (us) ="), _period);
+        
         return false;
       }
          
