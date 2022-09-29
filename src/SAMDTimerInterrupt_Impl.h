@@ -273,10 +273,12 @@
     {    
       TISR_LOGDEBUG1(F("_timerNumber ="), _timerNumber);
       
-      // (65536 * 1024) / 48 = 1,398,101.33us
-      if (_period > 1398101.3f)
+      // maxPermittedPeriod = 1,398,101.33us for 48MHz clock
+      float maxPermittedPeriod = (65536.0f * 1024) / (F_CPU / 1000000.0f );
+      
+      if (_period > maxPermittedPeriod )
       {
-        TISR_LOGERROR1(F("Max permissible _period = 1,398,101.33us, current _period ="), _period);
+        TISR_LOGERROR3(F("Max permissible _period (us) ="),  maxPermittedPeriod, F(", current _period (us) ="), _period);
         return false;
       }
          
