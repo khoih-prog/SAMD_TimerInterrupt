@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.10.0](#releases-v1100)
   * [Releases v1.9.0](#releases-v190)
   * [Releases v1.8.0](#releases-v180)
   * [Releases v1.7.0](#releases-v170)
@@ -30,6 +31,13 @@
 ---
 
 ## Changelog
+
+### Releases v1.10.0
+
+1. Avoid conflict with Servo library. Check [Cannot use TimerInterrupt_Generic Library in the same time than Servo Library #11](https://github.com/khoih-prog/TimerInterrupt_Generic/discussions/11)
+2. Prevent overflow of TCx by flagging error
+3. Modify all examples
+4. Update `Packages_Patches`
 
 ### Releases v1.9.0
 

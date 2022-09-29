@@ -160,12 +160,12 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
  2. [`Arduino SAMD core 1.8.13+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
  3. [`Adafruit SAMD core 1.7.10+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
- 4. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
- 5. [`Sparkfun SAMD core 1.8.1+`](https://github.com/sparkfun/Arduino_Boards) for SAMD21/SAMD51 boards (SparkFun_RedBoard_Turbo, SparkFun_SAMD51_Thing_Plus, etc.).
- 6. [`Blynk library 1.0.1`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with some examples. Don't use Blynk beta versions.
+ 4. [`Seeeduino SAMD core 1.8.3+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
+ 5. [`Sparkfun SAMD core 1.8.7+`](https://github.com/sparkfun/Arduino_Boards) for SAMD21/SAMD51 boards (SparkFun_RedBoard_Turbo, SparkFun_SAMD51_Thing_Plus, etc.).
+ 6. [`Blynk library 1.1.0`](https://github.com/blynkkk/blynk-library/releases). [![Latest release](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest/) to use with some examples. Don't use Blynk beta versions.
  7. To use with some examples, depending on which Ethernet card you're using:
-   - [`Ethernet_Generic library v2.3.0+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
-   - [`EthernetENC library v2.0.2+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
+   - [`Ethernet_Generic library v2.6.1+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
+   - [`EthernetENC library v2.0.3+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.12+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
  7. To use with some examples
    - [`SimpleTimer library`](https://github.com/jfturcot/SimpleTimer) for [ISR_16_Timers_Array](examples/ISR_16_Timers_Array) and [ISR_16_Timers_Array_Complex](examples/ISR_16_Timers_Array_Complex) examples. New to avoid error with `old` Sparkfun core.
@@ -243,13 +243,13 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
 
 #### 2. For Adafruit SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.9) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.9). 
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.10) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.10). 
 
-Supposing the Adafruit SAMD core version is 1.7.9. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.7.10. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.9/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.9/cores/arduino/Print.h`
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.9/cores/arduino/Print.cpp`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.10/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.10/cores/arduino/Print.h`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.10/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -260,14 +260,14 @@ This file must be copied into the directory:
 
 #### 3. For Seeeduino SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the whole [Seeeduino SAMD Packages_Patches](Packages_Patches/Seeeduino/hardware/samd/1.8.2) directory into Seeeduino samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2). 
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the whole [Seeeduino SAMD Packages_Patches](Packages_Patches/Seeeduino/hardware/samd/1.8.3) directory into Seeeduino samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3). 
 
-Supposing the Seeeduino SAMD core version is 1.8.2. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.8.3. This file must be copied into the directory:
 
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/platform.txt`
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/cores/arduino/Arduino.h`
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/cores/arduino/Print.h`
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/cores/arduino/Print.cpp`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/cores/arduino/Arduino.h`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/cores/arduino/Print.h`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -348,7 +348,7 @@ The current library implementation, using `xyz-Impl.h` instead of standard `xyz.
 
 You can include `.hpp`
 
-```
+```C++
 // Can be included as many times as necessary, without `Multiple Definitions` Linker Error
 #include "SAMDTimerInterrupt.hpp"     //https://github.com/khoih-prog/SAMD_TimerInterrupt
 
@@ -358,7 +358,7 @@ You can include `.hpp`
 
 in many files. But be sure to use the following `.h` files **in just 1 `.h`, `.cpp` or `.ino` file**, which must **not be included in any other file**, to avoid `Multiple Definitions` Linker Error
 
-```
+```C++
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "SAMDTimerInterrupt.h"       //https://github.com/khoih-prog/SAMD_TimerInterrupt
 
@@ -394,41 +394,70 @@ Before using any Timer, you have to make sure the Timer has not been used by any
 
 #### 1.1 Init Hardware Timer
 
-```
-// Depending on the board, you can select SAMD21 Hardware Timer from TC3, TC4, TC5, TCC, TCC1 or TCC2
-// SAMD51 Hardware Timer only TC3
+```C++
+// Select only one to be true for SAMD21. Must must be placed at the beginning before #include "SAMDTimerInterrupt.h"
+#define USING_TIMER_TC3         true      // Only TC3 can be used for SAMD51
+#define USING_TIMER_TC4         false     // Not to use with Servo library
+#define USING_TIMER_TC5         false
+#define USING_TIMER_TCC         false
+#define USING_TIMER_TCC1        false
+#define USING_TIMER_TCC2        false     // Don't use this, can crash on some boards
 
-// Init SAMD timer TIMER_TC3
-SAMDTimer ITimer(TIMER_TC3);
+// Uncomment To test if conflict with Servo library
+//#include "Servo.h"
 
-#if (TIMER_INTERRUPT_USING_SAMD21)
-// Init SAMD timer TIMER_TCC
-//SAMDTimer ITimer(TIMER_TC4);
-//SAMDTimer ITimer(TIMER_TC5);
-//SAMDTimer ITimer(TIMER_TCC);
-//SAMDTimer ITimer(TIMER_TCC1);
-//SAMDTimer ITimer(TIMER_TCC2);
+/////////////////////////////////////////////////////////////////
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include "SAMDTimerInterrupt.h"
+
+//////////////////////////////////////////////
+
+// TC3, TC4, TC5 max permissible TIMER_INTERVAL_MS is 1398.101 ms, larger will overflow, therefore not permitted
+// Use TCC, TCC1, TCC2 for longer TIMER_INTERVAL_MS
+#define TIMER_INTERVAL_MS        1000
+
+#if USING_TIMER_TC3
+  #define SELECTED_TIMER      TIMER_TC3
+#elif USING_TIMER_TC4
+  #define SELECTED_TIMER      TIMER_TC4
+#elif USING_TIMER_TC5
+  #define SELECTED_TIMER      TIMER_TC5
+#elif USING_TIMER_TCC
+  #define SELECTED_TIMER      TIMER_TCC
+#elif USING_TIMER_TCC1
+  #define SELECTED_TIMER      TIMER_TCC1
+#elif USING_TIMER_TCC2
+  #define SELECTED_TIMER      TIMER_TCC
+#else
+  #error You have to select 1 Timer  
 #endif
+
+// Init selected SAMD timer
+SAMDTimer ITimer(SELECTED_TIMER);
 ```
 
 #### 1.2 Set Hardware Timer Interval and attach Timer Interrupt Handler function
 
-```
-void TimerHandler0(void)
+```C++
+void TimerHandler()
 {
   // Doing something here inside ISR
 }
 
-#define TIMER0_INTERVAL_MS        1000      // 1s = 1000ms
+// TC3, TC4, TC5 max permissible TIMER_INTERVAL_MS is 1398.101 ms, larger will overflow, therefore not permitted
+// Use TCC, TCC1, TCC2 for longer TIMER_INTERVAL_MS
+#define TIMER_INTERVAL_MS        1000      // 1s = 1000ms
+
 void setup()
 {
   ....
   
   // Interval in microsecs
-  if (ITimer0.attachInterruptInterval_MS(TIMER0_INTERVAL_MS, TimerHandler0))
-    Serial.println("Starting  ITimer0 OK, millis() = " + String(millis()));
+  if (ITimer.attachInterruptInterval_MS(TIMER_INTERVAL_MS, TimerHandler0))
+    Serial.println("Starting  ITimer OK, millis() = " + String(millis()));
   else
-    Serial.println("Can't set ITimer0. Select another freq. or timer");
+    Serial.println("Can't set ITimer. Select another freq. or timer");
 }  
 ```
 
@@ -437,30 +466,56 @@ void setup()
 
 #### 2.1 Init Hardware Timer and ISR-based Timer
 
-```
-// Depending on the board, you can select SAMD21 Hardware Timer from TC3, TC4, TC5, TCC, TCC1 or TCC2
-// SAMD51 Hardware Timer only TC3
+```C++
+// Select only one to be true for SAMD21. Must must be placed at the beginning before #include "SAMDTimerInterrupt.h"
+#define USING_TIMER_TC3         true      // Only TC3 can be used for SAMD51
+#define USING_TIMER_TC4         false     // Not to use with Servo library
+#define USING_TIMER_TC5         false
+#define USING_TIMER_TCC         false
+#define USING_TIMER_TCC1        false
+#define USING_TIMER_TCC2        false     // Don't use this, can crash on some boards
 
-// Init SAMD timer TIMER_TC3
-SAMDTimer ITimer(TIMER_TC3);
+// Uncomment To test if conflict with Servo library
+//#include "Servo.h"
 
-#if (TIMER_INTERRUPT_USING_SAMD21)
-// Init SAMD timer TIMER_TCC
-//SAMDTimer ITimer(TIMER_TC4);
-//SAMDTimer ITimer(TIMER_TC5);
-//SAMDTimer ITimer(TIMER_TCC);
-//SAMDTimer ITimer(TIMER_TCC1);
-//SAMDTimer ITimer(TIMER_TCC2);
+/////////////////////////////////////////////////////////////////
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include "SAMDTimerInterrupt.h"
+
+//////////////////////////////////////////////
+
+// TC3, TC4, TC5 max permissible TIMER_INTERVAL_MS is 1398.101 ms, larger will overflow, therefore not permitted
+// Use TCC, TCC1, TCC2 for longer TIMER_INTERVAL_MS
+#define TIMER_INTERVAL_MS        1000
+
+#if USING_TIMER_TC3
+  #define SELECTED_TIMER      TIMER_TC3
+#elif USING_TIMER_TC4
+  #define SELECTED_TIMER      TIMER_TC4
+#elif USING_TIMER_TC5
+  #define SELECTED_TIMER      TIMER_TC5
+#elif USING_TIMER_TCC
+  #define SELECTED_TIMER      TIMER_TCC
+#elif USING_TIMER_TCC1
+  #define SELECTED_TIMER      TIMER_TCC1
+#elif USING_TIMER_TCC2
+  #define SELECTED_TIMER      TIMER_TCC
+#else
+  #error You have to select 1 Timer  
 #endif
+
+// Init selected SAMD timer
+SAMDTimer ITimer(SELECTED_TIMER);
 
 // Init SAMD_ISR_Timer
 // Each SAMD_ISR_Timer can service 16 different ISR-based timers
-SAMD_ISR_Timer ISR_Timer;
+ISR_Timer SAMD_ISR_Timer;
 ```
 
 #### 2.2 Set Hardware Timer Interval and attach Timer Interrupt Handler functions
 
-```
+```C++
 void TimerHandler(void)
 {
   ISR_Timer.run();
@@ -511,10 +566,10 @@ void setup()
 
   // Just to demonstrate, don't use too many ISR Timers if not absolutely necessary
   // You can use up to 16 timer for each ISR_Timer
-  ISR_Timer.setInterval(TIMER_INTERVAL_2S, doingSomething2s);
-  ISR_Timer.setInterval(TIMER_INTERVAL_5S, doingSomething5s);
-  ISR_Timer.setInterval(TIMER_INTERVAL_11S, doingSomething11s);
-  ISR_Timer.setInterval(TIMER_INTERVAL_101S, doingSomething101s);
+  SAMD_ISR_Timer.setInterval(TIMER_INTERVAL_2S, doingSomething2s);
+  SAMD_ISR_Timer.setInterval(TIMER_INTERVAL_5S, doingSomething5s);
+  SAMD_ISR_Timer.setInterval(TIMER_INTERVAL_11S, doingSomething11s);
+  SAMD_ISR_Timer.setInterval(TIMER_INTERVAL_101S, doingSomething101s);
 }  
 ```
 
@@ -562,7 +617,7 @@ While software timer, **programmed for 2s, is activated after 7.937s !!!**. Then
 
 ```
 Starting ISR_Timer_Complex_WiFiNINA on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.9.0
+SAMDTimerInterrupt v1.10.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -627,7 +682,7 @@ The following is the sample terminal output when running example [**TimerInterru
 
 ```
 Starting TimerInterruptTest on ITSYBITSY_M4
-SAMDTimerInterrupt v1.9.0
+SAMDTimerInterrupt v1.10.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 120 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 0x4101c000 , TC3 = 0x 0x4101c000
@@ -705,7 +760,7 @@ The following is the sample terminal output when running example [**Argument_Non
 
 ```
 Starting Argument_None on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.9.0
+SAMDTimerInterrupt v1.10.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -755,7 +810,7 @@ In this example, 16 independent ISR Timers are used, yet utilized just one Hardw
 
 ```
 Starting ISR_16_Timers_Array on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.9.0
+SAMDTimerInterrupt v1.10.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -879,7 +934,7 @@ The following is the sample terminal output when running example [Change_Interva
 
 ```
 Starting Change_Interval on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.9.0
+SAMDTimerInterrupt v1.10.0
 CPU Frequency = 48 MHz
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
 [TISR] TC_Timer::startTimer _Timer = 0x 42002c00 , TC3 = 0x 42002c00
@@ -943,7 +998,7 @@ The following is the sample terminal output when running example [RepeatedAttach
 
 ```
 Starting RepeatedAttachInterrupt_uS on SEEED_XIAO_M0
-SAMDTimerInterrupt v1.9.0
+SAMDTimerInterrupt v1.10.0
 CPU Frequency = 48 MHz
 [TISR] _period = 19995 , frequency = 50.01
 [TISR] SAMDTimerInterrupt: F_CPU (MHz) = 48 , TIMER_HZ = 48
@@ -1010,7 +1065,7 @@ The following is the sample terminal output when running example [SAMD21_MultiTi
 
 ```
 Starting SAMD21_MultiTimers on SAMD_NANO_33_IOT
-SAMDTimerInterrupt v1.9.0
+SAMDTimerInterrupt v1.10.0
 CPU Frequency = 48 MHz
 [TISR] _period = 20000.00 , frequency = 50.00
 [TISR] _timerNumber = 0
@@ -1050,21 +1105,18 @@ Starting  TIMER_TCC1 OK, millis() = 970
 [TISR] TCC_Timer::startTimer _Timer = 0x 42002800 , TCC2 = 0x 42002800
 [TISR] SAMD21 TCC2 period = 1000000.00 , _prescaler = 1024
 [TISR] _compareValue = 46874
-Starting  TIMER_TCC2 OK, millis() = 971
 ========================================
 TC3  Actual/Programmed (ms) 20/20
 TC4  Actual/Programmed (ms) 50/50
 TC5  Actual/Programmed (ms) 100/100
 TCC  Actual/Programmed (ms) 200/200
 TCC1 Actual/Programmed (ms) 500/500
-TCC2 Actual/Programmed (ms) 1000/1000
 ========================================
 TC3  Actual/Programmed (ms) 20/20
 TC4  Actual/Programmed (ms) 50/50
 TC5  Actual/Programmed (ms) 100/100
 TCC  Actual/Programmed (ms) 200/200
 TCC1 Actual/Programmed (ms) 500/500
-TCC2 Actual/Programmed (ms) 1000/1000
 ```
 
 
@@ -1077,7 +1129,7 @@ Debug is enabled by default on Serial.
 
 You can also change the debugging level (_TIMERINTERRUPT_LOGLEVEL_) from 0 to 4
 
-```cpp
+```C++
 // These define's must be placed at the beginning before #include "SAMD_TimerInterrupt.h"
 // _TIMERINTERRUPT_LOGLEVEL_ from 0 to 4
 // Don't define _TIMERINTERRUPT_LOGLEVEL_ > 0. Only for special ISR debugging only. Can hang the system.
@@ -1127,7 +1179,8 @@ Submit issues to: [SAMD_TimerInterrupt issues](https://github.com/khoih-prog/SAM
 11. Add TC4, TC5, TCC1 and TCC2 Timers to SAMD21
 12. Add example [SAMD21_MultiTimers](examples/SAMD21_MultiTimers) to demo the how to use all 6 SAMD21 timers simultaneously.
 13. Add functions `attachInterruptInterval_MS()` and `setInterval_MS()`
-
+14. Avoid conflict with Servo library. Check [Cannot use TimerInterrupt_Generic Library in the same time than Servo Library #11](https://github.com/khoih-prog/TimerInterrupt_Generic/discussions/11)
+15. Prevent overflow of TCx by flagging error
 
 ---
 ---
@@ -1145,6 +1198,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 7. Thanks to [Will Powell](https://github.com/WillPowellUk) to report the bug in [Multiple Definition Error Not fixed by swapping src_cpp or src_h with src #9](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/9) leading to new release v1.6.0.
 8. Thanks to [Dave Hooper](https://github.com/stripwax) to report the bug and propose the fix in [setInterval on a running timer results in a period significantly longer than the specified period #17](https://github.com/khoih-prog/SAMD_TimerInterrupt/issues/17) leading to new release v1.7.0
 9. Thanks to [Rui Marinheiro](https://github.com/sailorsail) to start the discussion in [Do I have a brick? I'm unable to upload sketches after using this library! #21](https://github.com/khoih-prog/SAMD_TimerInterrupt/discussions/21) leading to new release v1.8.0 to fix the bug
+10. Thanks to [sriccardi-invn](https://github.com/sriccardi-invn) to start the discussion in [Cannot use TimerInterrupt_Generic Library in the same time than Servo Library #11](https://github.com/khoih-prog/TimerInterrupt_Generic/discussions/11) leading to new release v1.10.0 to fix the bug and add more features
 
 ---
 
@@ -1161,6 +1215,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
     <td align="center"><a href="https://github.com/WillPowellUk"><img src="https://github.com/WillPowellUk.png" width="100px;" alt="WillPowellUk"/><br /><sub><b>Will Powell</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/stripwax"><img src="https://github.com/stripwax.png" width="100px;" alt="stripwax"/><br /><sub><b>Dave Hooper</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/sailorsail"><img src="https://github.com/sailorsail.png" width="100px;" alt="sailorsail"/><br /><sub><b>Rui Marinheiro</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/sriccardi-invn"><img src="https://github.com/sriccardi-invn.png" width="100px;" alt="sriccardi-invn"/><br /><sub><b>sriccardi-invn</b></sub></a><br /></td>
   </tr> 
 </table>
 

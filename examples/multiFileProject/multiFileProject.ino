@@ -23,6 +23,41 @@
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "SAMD_ISR_Timer.h"
 
+///////////////////////////////////////////////
+
+#if (TIMER_INTERRUPT_USING_SAMD21)
+
+  #if USING_TIMER_TC3
+    #define SELECTED_TIMER      TIMER_TC3
+  #elif USING_TIMER_TC4
+    #define SELECTED_TIMER      TIMER_TC4
+  #elif USING_TIMER_TC5
+    #define SELECTED_TIMER      TIMER_TC5
+  #elif USING_TIMER_TCC
+    #define SELECTED_TIMER      TIMER_TCC
+  #elif USING_TIMER_TCC1
+    #define SELECTED_TIMER      TIMER_TCC1
+  #elif USING_TIMER_TCC2
+    #define SELECTED_TIMER      TIMER_TCC
+  #else
+    #error You have to select 1 Timer  
+  #endif
+
+#else
+
+  #if !(USING_TIMER_TC3)
+    #error You must select TC3 for SAMD51
+  #endif
+  
+  #define SELECTED_TIMER      TIMER_TC3
+
+#endif  
+
+// Init selected SAMD timer
+SAMDTimer ITimer(SELECTED_TIMER);
+
+////////////////////////////////////////////////
+
 void setup() 
 {
   // put your setup code here, to run once:

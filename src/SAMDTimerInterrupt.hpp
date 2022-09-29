@@ -16,22 +16,23 @@
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
   
-  Version: 1.9.0
+  Version: 1.10.0
 
-  Version Modified By   Date      Comments
-  ------- -----------  ---------- -----------
-  1.0.0   K Hoang      30/10/2020 Initial coding
-  1.0.1   K Hoang      06/11/2020 Add complicated example ISR_16_Timers_Array using all 16 independent ISR Timers.
-  1.1.1   K.Hoang      06/12/2020 Add Change_Interval example. Bump up version to sync with other TimerInterrupt Libraries
-  1.2.0   K.Hoang      08/01/2021 Add better debug feature. Optimize code and examples to reduce RAM usage
-  1.3.0   K.Hoang      02/04/2021 Add support to Sparkfun SAMD21 and SAMD51 boards
-  1.3.1   K.Hoang      09/05/2021 Fix compile error to some SAMD21-based boards
-  1.4.0   K.Hoang      02/06/2021 Fix SAMD21 rare bug caused by not fully init Prescaler
-  1.5.0   K.Hoang      08/10/2021 Improve frequency precision by using float instead of ulong
-  1.6.0   K.Hoang      20/01/2022 Fix `multiple-definitions` linker error. Add support to many more boards
-  1.7.0   K.Hoang      25/04/2022 Optimize code for setInterval() of SAMD21 TC3
-  1.8.0   K.Hoang      07/05/2022 Scrap the buggy code in v1.7.0 for TC3
-  1.9.0   K.Hoang      08/05/2022 Add TC4, TC5, TCC1 and TCC2 Timers to SAMD21
+  Version  Modified By   Date      Comments
+  -------  -----------  ---------- -----------
+  1.0.0    K Hoang      30/10/2020 Initial coding
+  1.0.1    K Hoang      06/11/2020 Add complicated example ISR_16_Timers_Array using all 16 independent ISR Timers.
+  1.1.1    K.Hoang      06/12/2020 Add Change_Interval example. Bump up version to sync with other TimerInterrupt Libraries
+  1.2.0    K.Hoang      08/01/2021 Add better debug feature. Optimize code and examples to reduce RAM usage
+  1.3.0    K.Hoang      02/04/2021 Add support to Sparkfun SAMD21 and SAMD51 boards
+  1.3.1    K.Hoang      09/05/2021 Fix compile error to some SAMD21-based boards
+  1.4.0    K.Hoang      02/06/2021 Fix SAMD21 rare bug caused by not fully init Prescaler
+  1.5.0    K.Hoang      08/10/2021 Improve frequency precision by using float instead of ulong
+  1.6.0    K.Hoang      20/01/2022 Fix `multiple-definitions` linker error. Add support to many more boards
+  1.7.0    K.Hoang      25/04/2022 Optimize code for setInterval() of SAMD21 TC3
+  1.8.0    K.Hoang      07/05/2022 Scrap the buggy code in v1.7.0 for TC3
+  1.9.0    K.Hoang      08/05/2022 Add TC4, TC5, TCC1 and TCC2 Timers to SAMD21
+  1.10.0   K.Hoang      29/09/2022 Avoid conflict with Servo library. Modify all examples. Prevent overflow of TCx
 *****************************************************************************************************************************/
 /*
   SAMD21
@@ -154,13 +155,13 @@
 #include "Arduino.h"
 
 #ifndef SAMD_TIMER_INTERRUPT_VERSION
-  #define SAMD_TIMER_INTERRUPT_VERSION            "SAMDTimerInterrupt v1.9.0"
+  #define SAMD_TIMER_INTERRUPT_VERSION            "SAMDTimerInterrupt v1.10.0"
   
   #define SAMD_TIMER_INTERRUPT_VERSION_MAJOR      1
-  #define SAMD_TIMER_INTERRUPT_VERSION_MINOR      9
+  #define SAMD_TIMER_INTERRUPT_VERSION_MINOR      10
   #define SAMD_TIMER_INTERRUPT_VERSION_PATCH      0
 
-  #define SAMD_TIMER_INTERRUPT_VERSION_INT        1009000
+  #define SAMD_TIMER_INTERRUPT_VERSION_INT        1010000
 #endif
 
 #include "TimerInterrupt_Generic_Debug.h"
@@ -449,7 +450,7 @@ class SAMDTimerInterrupt
 typedef enum
 {
   TIMER_TC3  = 0,     // TC3
-  TIMER_TC4  = 1,      // TC4
+  TIMER_TC4  = 1,     // TC4
   TIMER_TC5  = 2,     // TC5
   TIMER_TCC  = 3,     // TCC0
   TIMER_TCC1 = 4,     // TCC1
@@ -668,7 +669,7 @@ class SAMDTimerInterrupt
       
       while (_Timer->STATUS.bit.SYNCBUSY == 1);
       
-      if (period > 300000) 
+      if (period > 300000)
       {
         // Set prescaler to 1024
         _Timer->CTRLA.reg |= TC_CTRLA_PRESCALER_DIV1024;
