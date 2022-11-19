@@ -9,13 +9,13 @@
   The accuracy is nearly perfect compared to software timers. The most important feature is they're ISR-based timers
   Therefore, their executions are not blocked by bad-behaving functions / tasks.
   This important feature is absolutely necessary for mission-critical tasks.
-  
+
   Based on SimpleTimer - A timer library for Arduino.
   Author: mromani@ottotecnica.com
   Copyright (c) 2010 OTTOTECNICA Italy
   Based on BlynkTimer.h
   Author: Volodymyr Shymanskyy
-  
+
   Version: 1.10.1
 
   Version  Modified By   Date      Comments
@@ -37,16 +37,16 @@
 *****************************************************************************************************************************/
 /*
   SAMD21
-  
+
   The Timer/Counter for Control Applications (TCC) module provides a set of timing and counting related functionality, such as the
   generation of periodic waveforms, the capturing of a periodic waveform's frequency/duty cycle, software timekeeping for periodic
   operations, waveform extension control, fault detection etc.
   The counter size of the TCC modules can be 16- or 24-bit depending on the TCC instance
-  
+
   1) Nano-33-IoT SAMD21G18A
   .arduino15/packages/arduino/tools/CMSIS-Atmel/1.2.0/CMSIS/Device/ATMEL/samd21/include/samd21g18a.h
    #define TC3  ((Tc *)0x42002C00UL)
-  
+
 */
 #pragma once
 
